@@ -8,12 +8,14 @@ import 'package:get/get.dart';
 import 'main_controller.dart';
 import 'modules/dashboard/dashboard_controller.dart';
 import 'modules/menu/menu_controller.dart';
+import 'modules/ticket/ticket_controller.dart';
 
 class MainBinding extends Bindings{
   @override
   void dependencies() {
     Get.lazyPut(() => MainController(), fenix: true);
     Get.lazyPut(() => DashboardController());
+    Get.lazyPut(() => TicketController());
     Get.lazyPut(()=>AddTicketController());
     Get.lazyPut(()=>FaqController());
     Get.lazyPut(()=>MenuPage());

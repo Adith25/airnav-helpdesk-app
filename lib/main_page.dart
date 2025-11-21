@@ -8,27 +8,28 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'main_controller.dart';
 import 'modules/dashboard/dashboard_page.dart';
 import 'modules/menu/menu_page.dart';
+import 'modules/ticket/ticket_page.dart';
 
 class MainPage extends GetView<MainController> {
   const MainPage({super.key});
 
   List<Widget> _screens() => [
-    const APage(),
-    const BPage(),
+    DashboardPage(),
+    TicketPage(),
     MenuPage(),
     AddTicketPage(),
-    // FaqPage(),
-
+    // FaqPage()
   ];
 
   List<PersistentBottomNavBarItem> _items() => [
+
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.abc),
-      title: 'A',
+      icon: const Icon(Icons.dashboard),
+      title: 'Dashboard',
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.abc_rounded),
-      title: 'B',
+      icon: const Icon(Icons.airplane_ticket_outlined), // TODO change to lucide ticket
+      title: 'Ticket',
     ),
     PersistentBottomNavBarItem(
       icon: const Icon(Icons.menu),
