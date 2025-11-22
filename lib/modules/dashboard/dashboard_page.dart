@@ -54,20 +54,7 @@ class DashboardPage extends GetView<DashboardController> {
               children: [
                 Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.teal),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Text(
-                        'Availability Status',
-                        style: TextStyle(fontSize: 12, color: Colors.teal),
-                      ),
-                    ),
+                    ShadBadge.outline(child: const Text('Availability Status')),
                     const SizedBox(width: 12),
                     Obx(
                       () => ShadSwitch(
@@ -97,7 +84,7 @@ class DashboardPage extends GetView<DashboardController> {
                 ),
               ],
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 24),
 
             GridView.count(
               crossAxisCount: 2,

@@ -64,22 +64,42 @@ class AddTicketPage extends GetView<AddTicketController> {
                 minLines: 3,
               ),
               const SizedBox(height: 16),
-              ShadButton.outline(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   // Implement file picking logic
                 },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.attach_file, size: 16),
-                    SizedBox(width: 8),
-                    Text('Upload File'),
-                  ],
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.shade300,
+                      style: BorderStyle.solid,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.grey.shade50,
+                  ),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.cloud_upload_outlined,
+                        size: 32,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Tap to upload file',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
               ShadButton(
                 onPressed: controller.submitTicket,
+                width: double.infinity,
                 child: const Text('Submit Ticket'),
               ),
             ],

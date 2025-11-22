@@ -19,11 +19,20 @@ class MainApp extends StatelessWidget {
           title: 'Helpdesk',
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
+          theme: Theme.of(context),
           builder: (context, child) {
             return ShadAppBuilder(child: child!);
           },
         );
       },
+      theme: ShadThemeData(
+        brightness: Brightness.light,
+        colorScheme: const ShadZincColorScheme.light(),
+      ),
+      darkTheme: ShadThemeData(
+        brightness: Brightness.dark,
+        colorScheme: const ShadZincColorScheme.dark(),
+      ),
     );
   }
 }
