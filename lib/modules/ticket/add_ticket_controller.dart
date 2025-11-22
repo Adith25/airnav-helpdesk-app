@@ -67,6 +67,7 @@ class AddTicketController extends GetxController {
           ],
           status: 'Open',
           highlight: 'NEW',
+          description: descriptionController.text,
         );
 
         dashboardController.requests.insert(0, newRequest);
