@@ -20,7 +20,7 @@ class MainPage extends GetView<MainController> {
     ),
     PersistentBottomNavBarItem(
       icon: const Icon(Icons.add_circle_outline),
-      title: 'Add Ticket',
+      title: 'Submit Ticket',
       activeColorPrimary: Colors.black,
       inactiveColorPrimary: Colors.grey.shade400,
     ),
