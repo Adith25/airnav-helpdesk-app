@@ -1,19 +1,19 @@
-import 'package:airnav_helpdesk/modules/faq/faq_page.dart';
 import 'package:airnav_helpdesk/modules/ticket/add_ticket_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'main_controller.dart';
 import 'modules/dashboard/dashboard_page.dart';
 import 'modules/menu/menu_page.dart';
-import 'modules/ticket/ticket_page.dart';
+import 'modules/ticket/ticket_list_page.dart';
 
 class MainPage extends GetView<MainController> {
   const MainPage({super.key});
 
   List<Widget> _screens() => [
     DashboardPage(),
-    TicketPage(),
+    TicketListPage(),
     MenuPage(),
     AddTicketPage(),
     // FaqPage()
@@ -26,7 +26,7 @@ class MainPage extends GetView<MainController> {
       title: 'Dashboard',
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.airplane_ticket_outlined), // TODO change to lucide ticket
+      icon: const Icon(LucideIcons.ticket), // TODO change to lucide ticket
       title: 'Ticket',
     ),
     PersistentBottomNavBarItem(
