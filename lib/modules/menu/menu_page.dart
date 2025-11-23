@@ -12,7 +12,7 @@ class MenuPage extends StatelessWidget {
     final controller = Get.put(menu_ctrl.MenuController());
     
     return Scaffold(
-      // appBar: AppBarWidget(title: 'Menu'),
+      appBar: AppBarWidget(titleText: 'Menu'),
       backgroundColor: Colors.grey[50],
       body: SingleChildScrollView(
         child: Column(
@@ -69,7 +69,7 @@ class MenuPage extends StatelessWidget {
           ),
         ),
       ),
-      padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
       child: Row(
         children: [
           // Avatar

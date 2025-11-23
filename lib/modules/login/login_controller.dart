@@ -5,7 +5,7 @@ import 'package:airnav_helpdesk/main_page.dart';
 import 'package:airnav_helpdesk/main_controller.dart';
 
 class LoginController extends GetxController {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController personnelNumberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final RxBool isObscure = true.obs;
   final RxBool isLoading = false.obs;
@@ -15,7 +15,7 @@ class LoginController extends GetxController {
   }
 
   void login() async {
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+    if (personnelNumberController.text.isEmpty || passwordController.text.isEmpty) {
       Get.snackbar(
         'Error',
         'Please enter email and password',
@@ -43,7 +43,7 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    emailController.dispose();
+    personnelNumberController.dispose();
     passwordController.dispose();
     super.onClose();
   }

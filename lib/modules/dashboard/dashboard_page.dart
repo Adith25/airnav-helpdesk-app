@@ -10,7 +10,7 @@ class DashboardPage extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
-      appBar: AppBarWidget(title: 'Beranda'),
+      appBar: AppBarWidget(titleText: 'Beranda'),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.toNamed('/chatbot'),
         backgroundColor: Colors.blue,
