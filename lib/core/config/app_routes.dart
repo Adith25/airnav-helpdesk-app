@@ -8,6 +8,7 @@ abstract class Routes {
   static const FAQ = _Path.FAQ;
   static const ONBOARDING = _Path.ONBOARDING;
   static const LOGIN = _Path.LOGIN;
+  static const CHATBOT = _Path.CHATBOT;
 }
 
 abstract class _Path {
@@ -18,4 +19,5 @@ abstract class _Path {
   static const FAQ = '/faq';
   static const ONBOARDING = '/onboarding';
   static const LOGIN = '/login';
+  static const CHATBOT = '/chatbot';
 }

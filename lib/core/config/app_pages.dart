@@ -12,6 +12,8 @@ import '../../modules/ticket/detail/detail_ticket_binding.dart';
 import '../../modules/ticket/detail/detail_ticket_page.dart';
 import '../../modules/onboarding/onboarding_page.dart';
 import '../../modules/login/login_page.dart';
+import '../../modules/chatbot/chatbot_binding.dart';
+import '../../modules/chatbot/chatbot_page.dart';
 
 part 'app_routes.dart';
 
@@ -48,5 +50,10 @@ class AppPages {
     ),
     GetPage(name: _Path.ONBOARDING, page: () => const OnboardingPage()),
     GetPage(name: _Path.LOGIN, page: () => const LoginPage()),
+    GetPage(
+      name: _Path.CHATBOT,
+      page: () => const ChatbotPage(),
+      binding: ChatbotBinding(),
+    ),
   ];
 }

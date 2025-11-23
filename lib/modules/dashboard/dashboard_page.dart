@@ -1,4 +1,3 @@
-import 'package:airnav_helpdesk/modules/dashboard/models/help_request.dart';
 import 'package:airnav_helpdesk/modules/dashboard/widgets/request_card.dart';
 import 'package:airnav_helpdesk/modules/dashboard/widgets/stat_card.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +138,11 @@ class DashboardPage extends GetView<DashboardController> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed('/chatbot'),
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.chat_bubble_outline),
       ),
     );
   }
