@@ -1,34 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../ticket_model.dart';
 
 class TicketCard extends StatelessWidget {
   final TicketModel ticket;
+
   const TicketCard({super.key, required this.ticket});
 
   Color _statusColor(String status) {
     switch (status) {
-      case 'DONE':
-        return Colors.green.shade100;
-      case 'ON PROCESS':
-        return Colors.blue.shade100;
-      case 'ASSIGNED':
-        return Colors.yellow.shade100;
+      case 'Done':
+        return Colors.green.shade50;
+      case 'In Progress':
+        return Colors.blue.shade50;
+      case 'Assigned':
+        return Colors.yellow.shade50;
+      case 'New':
+        return Colors.purple.shade50;
       default:
         return Colors.grey.shade200;
+    }
+  }
+
+  Color _statusTextColor(String status) {
+    switch (status) {
+      case 'Done':
+        return Colors.green.shade800;
+      case 'In Progress':
+        return Colors.blue.shade800;
+      case 'Assigned':
+        return Colors.yellow.shade800;
+      case 'New':
+        return Colors.purple.shade800;
+      default:
+        return Colors.grey.shade800;
+    }
+  }
+
+  Color _priorityTextColor(String priority) {
+    switch (priority) {
+      case 'Critical':
+        return Colors.red.shade800;
+      case 'High':
+        return Colors.orange.shade800;
+      case 'Medium':
+        return Colors.yellow.shade800;
+      case 'Low':
+        return Colors.green.shade800;
+      default:
+        return Colors.grey.shade800;
     }
   }
 
   Color _priorityColor(String priority) {
     switch (priority) {
       case 'Critical':
-        return Colors.red.shade100;
+        return Colors.red.shade50;
       case 'High':
-        return Colors.orange.shade100;
+        return Colors.orange.shade50;
       case 'Medium':
-        return Colors.yellow.shade100;
+        return Colors.yellow.shade50;
       case 'Low':
-        return Colors.green.shade100;
+        return Colors.green.shade50;
       default:
         return Colors.grey.shade200;
     }
@@ -48,7 +82,7 @@ class TicketCard extends StatelessWidget {
             color: Colors.black.withOpacity(0.03),
             blurRadius: 6,
             offset: const Offset(0, 2),
-          )
+          ),
         ],
       ),
       child: Column(
@@ -58,9 +92,13 @@ class TicketCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Text(ticket.code,
-                    style: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w600)),
+                child: Text(
+                  ticket.code,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -68,9 +106,10 @@ class TicketCard extends StatelessWidget {
                   color: _statusColor(ticket.status),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(ticket.status,
-                    style: TextStyle(
-                        fontSize: 10, color: Colors.grey.shade800)),
+                child: Text(
+                  ticket.status,
+                  style: TextStyle(fontSize: 10, color: _statusTextColor(ticket.status)),
+                ),
               ),
               const SizedBox(width: 6),
               Container(
@@ -79,17 +118,22 @@ class TicketCard extends StatelessWidget {
                   color: _priorityColor(ticket.priority),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(ticket.priority,
-                    style: TextStyle(
-                        fontSize: 10, color: Colors.grey.shade800)),
+                child: Text(
+                  ticket.priority,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: _priorityTextColor(ticket.priority),
+                  ),
+                ),
               ),
             ],
           ),
 
           const SizedBox(height: 10),
-          Text(ticket.title,
-              style: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w600)),
+          Text(
+            ticket.title,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          ),
 
           const SizedBox(height: 12),
           Row(
@@ -97,20 +141,25 @@ class TicketCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Kategori',
-                      style: TextStyle(fontSize: 10, color: Colors.grey)),
-                  Text(ticket.category,
-                      style: const TextStyle(fontSize: 12)),
+                  const Text(
+                    'Kategori',
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
+                  Text(ticket.category, style: const TextStyle(fontSize: 12)),
                 ],
               ),
               const Spacer(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Sub Kategori',
-                      style: TextStyle(fontSize: 10, color: Colors.grey)),
-                  Text(ticket.subCategory,
-                      style: const TextStyle(fontSize: 12)),
+                  const Text(
+                    'Sub Kategori',
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
+                  Text(
+                    ticket.subCategory,
+                    style: const TextStyle(fontSize: 12),
+                  ),
                 ],
               ),
             ],
@@ -120,10 +169,11 @@ class TicketCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Progres',
-                  style: TextStyle(fontSize: 10, color: Colors.grey)),
-              Text('${ticket.progress}%',
-                  style: const TextStyle(fontSize: 12)),
+              const Text(
+                'Progres',
+                style: TextStyle(fontSize: 10, color: Colors.grey),
+              ),
+              Text('${ticket.progress}%', style: const TextStyle(fontSize: 12)),
             ],
           ),
           const SizedBox(height: 4),
@@ -138,9 +188,7 @@ class TicketCard extends StatelessWidget {
               widthFactor: ticket.progress / 100,
               child: Container(
                 decoration: BoxDecoration(
-                  color: ticket.progress == 100
-                      ? Colors.green
-                      : Colors.blue,
+                  color: ticket.progress == 100 ? Colors.green : Colors.blue,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -152,9 +200,10 @@ class TicketCard extends StatelessWidget {
             children: [
               Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
               const SizedBox(width: 4),
-              Text(ticket.lastUpdate,
-                  style:
-                  TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+              Text(
+                ticket.lastUpdate,
+                style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
+              ),
             ],
           ),
 
@@ -166,13 +215,18 @@ class TicketCard extends StatelessWidget {
                 backgroundColor: const Color(0xFF175fa4),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-              onPressed: () {},
-              child: const Text('Lihat Detail',
-                  style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                Get.toNamed('/ticket/detail');
+              },
+              child: const Text(
+                'Lihat Detail',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
