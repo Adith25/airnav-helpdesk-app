@@ -1,7 +1,5 @@
 import 'package:airnav_helpdesk/modules/faq/faq_page.dart';
 import 'package:airnav_helpdesk/modules/ticket/add_ticket_page.dart';
-import 'package:airnav_helpdesk/modules/ticket/detail/detail_ticket_page.dart';
-import 'package:airnav_helpdesk/placeholder_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -36,8 +34,10 @@ class MainPage extends GetView<MainController> {
       title: 'Menu',
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.details),
-      title: 'Add Ticket',
+      icon: const Icon(Icons.add_circle_outline),
+      title: 'Submit Ticket',
+      activeColorPrimary: Colors.black,
+      inactiveColorPrimary: Colors.grey.shade400,
     ),
     // PersistentBottomNavBarItem(
     //   icon: const Icon(Icons.question_mark),
@@ -55,10 +55,11 @@ class MainPage extends GetView<MainController> {
       navBarStyle: NavBarStyle.style3,
       backgroundColor: Colors.white,
       decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(0),
         colorBehindNavBar: Colors.white,
+        border: Border(top: BorderSide(color: Colors.grey.shade200)),
       ),
-      stateManagement: false, // GetX yang handle state
+      stateManagement: false,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
     );

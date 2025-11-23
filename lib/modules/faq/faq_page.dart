@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'faq_controller.dart';
 

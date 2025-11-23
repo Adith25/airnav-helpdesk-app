@@ -17,7 +17,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.MAIN;
+  static const INITIAL = Routes.ONBOARDING;
 
   static final routes = [
     GetPage(
@@ -28,6 +28,7 @@ class AppPages {
     GetPage(
       name: _Path.DASHBOARD,
       page: () => DashboardPage(),
+      binding: DashboardBinding(),
     ),
     GetPage(
       name: _Path.TICKET_DETAIL,
@@ -48,6 +49,13 @@ class AppPages {
       name: _Path.FAQ,
       page: () => const FaqPage(),
       binding: FaqBinding(),
+    ),
+    GetPage(name: _Path.ONBOARDING, page: () => const OnboardingPage()),
+    GetPage(name: _Path.LOGIN, page: () => const LoginPage()),
+    GetPage(
+      name: _Path.CHATBOT,
+      page: () => const ChatbotPage(),
+      binding: ChatbotBinding(),
     ),
   ];
 }
