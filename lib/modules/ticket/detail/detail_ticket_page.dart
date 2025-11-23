@@ -1,6 +1,7 @@
 import 'package:airnav_helpdesk/core/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'detail_ticket_controller.dart';
 
 class DetailTicketPage extends GetView<DetailTicketController> {
@@ -218,7 +219,7 @@ class DetailTicketPage extends GetView<DetailTicketController> {
                   children: [
                     _buildFooterChip(Icons.calendar_today_outlined, 'Due Date', '16 Mar 2025, 12.17', Colors.blue.shade700),
                     const SizedBox(width: 16),
-                    _buildFooterChip(Icons.location_on_outlined, 'Stage', 'On Process', Colors.purple.shade700),
+                    _buildFooterChip(LucideIcons.hourglass, 'Stage', 'On Process', Colors.purple.shade700),
                   ],
                 )
               ],

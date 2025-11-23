@@ -5,9 +5,15 @@ import '../ticket_model.dart';
 
 class TicketCard extends StatelessWidget {
   final TicketModel ticket;
+  final String activeTab; // New parameter
 
-  const TicketCard({super.key, required this.ticket});
+  const TicketCard({
+    super.key,
+    required this.ticket,
+    required this.activeTab, // Pass the active tab
+  });
 
+  // --- Color Helpers ---
   Color _statusColor(String status) {
     switch (status) {
       case 'Done':
@@ -68,6 +74,104 @@ class TicketCard extends StatelessWidget {
     }
   }
 
+  // --- Bottom Sheet Action ---
+  void _showActionBottomSheet(BuildContext context,
+      {required String title, required String hint}) {
+    Get.bottomSheet(
+      // Prevents keyboard from covering the content
+      SingleChildScrollView(
+        child: Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Kode Tiket',
+                          style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      const SizedBox(height: 2),
+                      Text(ticket.code,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      Text(ticket.title),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text('Nota (Opsional)',
+                    style: TextStyle(color: Colors.grey, fontSize: 12)),
+                const SizedBox(height: 8),
+                TextField(
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    hintText: hint,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Get.back(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: title == 'Tolak Tiket'
+                          ? Colors.red
+                          : const Color(0xFF175fa4),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(title.split(' ').first),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -88,6 +192,7 @@ class TicketCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // --- Ticket Header ---
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -101,19 +206,22 @@ class TicketCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: _statusColor(ticket.status),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   ticket.status,
-                  style: TextStyle(fontSize: 10, color: _statusTextColor(ticket.status)),
+                  style: TextStyle(
+                      fontSize: 10, color: _statusTextColor(ticket.status)),
                 ),
               ),
               const SizedBox(width: 6),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: _priorityColor(ticket.priority),
                   borderRadius: BorderRadius.circular(8),
@@ -136,6 +244,7 @@ class TicketCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 12),
+          // --- Category Info ---
           Row(
             children: [
               Column(
@@ -166,6 +275,7 @@ class TicketCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
+          // --- Progress Bar ---
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -196,6 +306,7 @@ class TicketCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 14),
+          // --- Last Update ---
           Row(
             children: [
               Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
@@ -208,27 +319,128 @@ class TicketCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF175fa4),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {
-                Get.toNamed('/ticket/detail');
-              },
-              child: const Text(
-                'Lihat Detail',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
+          // --- Action Buttons ---
+          _buildActionButtons(context),
         ],
       ),
     );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    switch (activeTab) {
+      case 'Menunggu Konfirmasi':
+        return Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.close, size: 16),
+                label: const Text('Tolak'),
+                onPressed: () => _showActionBottomSheet(
+                  context,
+                  title: 'Tolak Tiket',
+                  hint: 'Ketik alasan menolak...',
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.red.shade700,
+                  backgroundColor: Colors.red.shade50,
+                  side: BorderSide(color: Colors.red.shade200),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.check, size: 16),
+                label: const Text('Terima'),
+                onPressed: () => _showActionBottomSheet(
+                  context,
+                  title: 'Terima Tiket',
+                  hint: 'Ketik keterangan terima...',
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF175fa4),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      case 'Menunggu Penugasan':
+        return Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.close, size: 16),
+                label: const Text('Tolak'),
+                onPressed: () => _showActionBottomSheet(
+                  context,
+                  title: 'Tolak Tiket',
+                  hint: 'Ketik alasan tidak menyetujui tiket...',
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.red.shade700,
+                  backgroundColor: Colors.red.shade50,
+                  side: BorderSide(color: Colors.red.shade200),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.people_alt_outlined, size: 16),
+                label: const Text('Tugaskan'),
+                onPressed: () {
+                  Get.snackbar(
+                    'Go to Assign Ticket Page',
+                    'Navigating to the assign ticket page.',
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF175fa4),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      case 'Daftar Tiket':
+      default:
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF175fa4),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () {
+              Get.toNamed('/ticket/detail');
+            },
+            child: const Text(
+              'Lihat Detail',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+    }
   }
 }

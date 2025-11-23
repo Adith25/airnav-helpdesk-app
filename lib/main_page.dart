@@ -25,7 +25,7 @@ class MainPage extends GetView<MainController> {
     ),
     PersistentBottomNavBarItem(
       icon: const Icon(LucideIcons.ticket), // TODO change to lucide ticket
-      title: 'Ticket',
+      title: 'Tiket',
     ),
     PersistentBottomNavBarItem(
       icon: const Icon(Icons.menu),

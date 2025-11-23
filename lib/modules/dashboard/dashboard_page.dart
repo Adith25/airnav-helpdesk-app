@@ -192,9 +192,9 @@ class DashboardPage extends GetView<DashboardController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildSummaryItem(
-                  Icons.confirmation_number_outlined, 'Total Ticket', '18', Colors.blue, true),
+                  Icons.confirmation_number_outlined, 'Total Tiket', '18', Colors.blue, true),
               _buildSummaryItem(
-                  Icons.groups_outlined, 'Total Teknisi', '9', Colors.blueGrey, true),
+                  Icons.groups_outlined, 'Total Assignee', '9', Colors.blueGrey, true),
             ],
           ),
           const SizedBox(height: 16),
@@ -204,9 +204,9 @@ class DashboardPage extends GetView<DashboardController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
                _buildSummaryItem(
-                  Icons.thumb_up_outlined, 'Umpan Balik Positif', '95%', Colors.green, false),
+                  Icons.thumb_up_outlined, 'Feedback Positif', '95%', Colors.green, false),
               _buildSummaryItem(
-                  Icons.thumb_down_outlined, 'Umpan Balik Negatif', '5%', Colors.red, false),
+                  Icons.thumb_down_outlined, 'Feedback Negatif', '5%', Colors.red, false),
             ],
           ),
         ],
