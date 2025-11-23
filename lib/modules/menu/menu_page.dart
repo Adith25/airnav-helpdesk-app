@@ -1,3 +1,4 @@
+import 'package:airnav_helpdesk/core/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'menu_controller.dart' as menu_ctrl;
@@ -11,6 +12,7 @@ class MenuPage extends StatelessWidget {
     final controller = Get.put(menu_ctrl.MenuController());
     
     return Scaffold(
+      // appBar: AppBarWidget(title: 'Menu'),
       backgroundColor: Colors.grey[50],
       body: SingleChildScrollView(
         child: Column(
@@ -59,7 +61,7 @@ class MenuPage extends StatelessWidget {
   Widget _buildProfileHeader(menu_ctrl.MenuController controller) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF135CA1),
+        color: const Color(0xFF0D47A1),
         border: Border(
           bottom: BorderSide(
             color: const Color(0xFF0F3C5C),

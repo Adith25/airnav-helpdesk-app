@@ -11,19 +11,11 @@ class TicketListPage extends GetView<TicketListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Tickets'),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
-          )
-        ],
-      ),
+      backgroundColor: const Color(0xFFF5F6FA),
+      appBar: AppBarWidget(title: 'Tiket Saya'),
       body: Column(
         children: [
-          _buildTabs(),
+          const SizedBox(height: 8),
           _buildSearchField(),
           _buildFilterBar(),
           const SizedBox(height: 8),

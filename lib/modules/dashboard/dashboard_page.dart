@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+import '../../core/widgets/app_bar_widget.dart';
 import 'dashboard_controller.dart';
 
 class DashboardPage extends GetView<DashboardController> {
@@ -10,39 +10,7 @@ class DashboardPage extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0D47A1),
-        elevation: 0,
-        toolbarHeight: 80,
-        title: Row(
-          children: [
-            // Assuming you have a logo in your assets
-            // Image.asset('assets/logo.png', height: 40),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Helpdesk AIRNAV',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  'Dashboard Overview',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white70,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+      appBar: AppBarWidget(title: 'Beranda'),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.toNamed('/chatbot'),
         backgroundColor: Colors.blue,
@@ -370,3 +338,4 @@ class DashboardPage extends GetView<DashboardController> {
     );
   }
 }
+
