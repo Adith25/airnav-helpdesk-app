@@ -1,5 +1,5 @@
 import 'package:airnav_helpdesk/modules/faq/faq_controller.dart';
-import 'package:airnav_helpdesk/modules/ticket/add_ticket_controller.dart';
+import 'package:airnav_helpdesk/modules/ticket/add/add_ticket_controller.dart';
 import 'package:get/get.dart';
 import 'main_controller.dart';
 import 'modules/dashboard/dashboard_controller.dart';
@@ -12,7 +12,6 @@ class MainBinding extends Bindings{
     Get.lazyPut(() => MainController(), fenix: true);
     Get.lazyPut(() => DashboardController());
     Get.lazyPut(() => TicketListController());
-    Get.lazyPut(()=>AddTicketController());
     Get.lazyPut(()=>FaqController());
     Get.lazyPut(()=>MenuController());
   }

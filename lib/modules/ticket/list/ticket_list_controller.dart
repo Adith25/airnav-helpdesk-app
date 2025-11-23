@@ -51,7 +51,7 @@ class TicketListController extends GetxController {
   // NAVIGATION (placeholder)
   // -----------------------------
   void goToNewTicket() {
-    Get.snackbar('Navigation', 'Go to new ticket page (to be implemented)');
+    Get.toNamed('/ticket/add');
   }
 
   // -----------------------------

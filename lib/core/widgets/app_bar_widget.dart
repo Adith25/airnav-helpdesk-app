@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final String titleText;
+  final Widget? leading;
   const AppBarWidget({
     super.key,
-    required this.title,
+    required this.titleText,
+    this.leading,
   });
 
   @override
@@ -13,15 +15,15 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: const Color(0xFF0D47A1),
       elevation: 0,
       toolbarHeight: 80,
+      leading: leading,
       title: Row(
         children: [
           // Image.asset('assets/logo.png', height: 40),
-          const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Helpdesk AIRNAV',
+               Text(
+                titleText,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -29,9 +31,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              Text(
-                title,
-                style: const TextStyle(
+              const Text(
+                'Helpdesk AIRNAV',
+                style: TextStyle(
                   fontSize: 14,
                   color: Colors.white70,
                 ),

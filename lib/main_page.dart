@@ -1,4 +1,4 @@
-import 'package:airnav_helpdesk/modules/ticket/add_ticket_page.dart';
+import 'package:airnav_helpdesk/modules/ticket/add/add_ticket_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -15,8 +15,6 @@ class MainPage extends GetView<MainController> {
     DashboardPage(),
     TicketListPage(),
     MenuPage(),
-    AddTicketPage(),
-    // FaqPage()
   ];
 
   List<PersistentBottomNavBarItem> _items() => [
@@ -33,16 +31,6 @@ class MainPage extends GetView<MainController> {
       icon: const Icon(Icons.menu),
       title: 'Menu',
     ),
-    PersistentBottomNavBarItem(
-      icon: const Icon(Icons.add_circle_outline),
-      title: 'Submit Ticket',
-      activeColorPrimary: Colors.black,
-      inactiveColorPrimary: Colors.grey.shade400,
-    ),
-    // PersistentBottomNavBarItem(
-    //   icon: const Icon(Icons.question_mark),
-    //   title: 'FAQ',
-    // ),
   ];
 
   @override
