@@ -7,6 +7,9 @@ abstract class Routes {
   static const ADD_TICKET = _Path.ADD_TICKET;
   static const FAQ = _Path.FAQ;
   static const TICKET = _Path.TICKET;
+  static const ONBOARDING = _Path.ONBOARDING;
+  static const CHATBOT = _Path.CHATBOT;
+  static const LOGIN = _Path.LOGIN;
 }
 
 abstract class _Path {
@@ -16,4 +19,7 @@ abstract class _Path {
   static const ADD_TICKET = '/ticket/add';
   static const FAQ = '/faq';
   static const TICKET = '/ticket';
+  static const ONBOARDING = '/onboarding';
+  static const CHATBOT = '/chatbot';
+  static const LOGIN = '/login';
 }

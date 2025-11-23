@@ -43,6 +43,11 @@ class DashboardPage extends GetView<DashboardController> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed('/chatbot'),
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.chat_bubble_outline),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
@@ -361,11 +366,7 @@ class DashboardPage extends GetView<DashboardController> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed('/chatbot'),
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.chat_bubble_outline),
-      ),
+
     );
   }
 }

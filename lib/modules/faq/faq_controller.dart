@@ -140,23 +140,23 @@ class FaqController extends GetxController {
     ),
   ].obs;
 
-  List<FaqItem> get filteredItems {
-    return faqItems.where((item) {
-      final matchesSearch =
-          item.question.toLowerCase().contains(
-            searchQuery.value.toLowerCase(),
-          ) ||
-          item.answer.toLowerCase().contains(searchQuery.value.toLowerCase());
-      final matchesCategory =
-          selectedCategory.value == 'All' ||
-          item.category == selectedCategory.value;
-      return matchesSearch && matchesCategory;
-    }).toList();
-  }
-
-  void setSearchQuery(String query) {
-    searchQuery.value = query;
-  }
+  // List<FaqItem> get filteredItems {
+  //   return allFaqItems.where((item) {
+  //     final matchesSearch =
+  //         item.question.toLowerCase().contains(
+  //           searchQuery.value.toLowerCase(),
+  //         ) ||
+  //         item.answer.toLowerCase().contains(searchQuery.value.toLowerCase());
+  //     final matchesCategory =
+  //         selectedCategory.value == 'All' ||
+  //         item.category == selectedCategory.value;
+  //     return matchesSearch && matchesCategory;
+  //   }).toList();
+  // }
+  //
+  // void setSearchQuery(String query) {
+  //   searchQuery.value = query;
+  // }
 
   void setCategory(String category) {
     selectedCategory.value = category;
