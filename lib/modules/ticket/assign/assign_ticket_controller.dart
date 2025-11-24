@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../list/ticket_list_controller.dart';
@@ -117,7 +116,11 @@ class AssignTicketController extends GetxController {
   }
 
   void pickAssignee(Assignee a) {
-    selectedAssignee.value = a;
+    if (selectedAssignee.value?.id == a.id) {
+      selectedAssignee.value = null;
+    } else {
+      selectedAssignee.value = a;
+    }
   }
 
   void setNote(String v) => note.value = v;

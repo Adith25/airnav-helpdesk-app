@@ -1,6 +1,7 @@
-import 'package:airnav_helpdesk/core/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../core/widgets/app_bar_widget.dart';
+import '../ticket_model.dart';
 import 'assign_ticket_controller.dart';
 
 class AssignTicketPage extends GetView<AssignTicketController> {
@@ -83,65 +84,76 @@ class AssignTicketPage extends GetView<AssignTicketController> {
     ));
   }
 
-  Widget _ticketItem(ticket) {
+  Widget _ticketItem(TicketModel ticket) {
     final selected = controller.selectedTicketCodes.contains(ticket.code);
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.grey.shade200)),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Checkbox(value: selected, onChanged: (_) => controller.toggleTicketSelection(ticket.code)),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(ticket.code, style: const TextStyle(fontWeight: FontWeight.w600)),
-              const SizedBox(height: 6),
-              Text(ticket.title),
-              const SizedBox(height: 8),
-              Row(children: [
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  const Text('Reporter', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                  const SizedBox(height: 4),
-                  Text('A N A M E', style: const TextStyle(fontWeight: FontWeight.w600)),
-                ])),
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  const Text('Category', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                  const SizedBox(height: 4),
-                  Text(ticket.category, style: const TextStyle(fontWeight: FontWeight.w600)),
-                ])),
-              ])
-            ]),
-          )
-        ],
+    return InkWell(
+      onTap: () => controller.toggleTicketSelection(ticket.code),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          // Add a blue border when selected for better visual feedback
+          border: Border.all(color: selected ? Colors.blue : Colors.grey.shade200),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Checkbox is removed, the whole card is now the tap area.
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(ticket.code, style: const TextStyle(fontWeight: FontWeight.w600)),
+                const SizedBox(height: 6),
+                Text(ticket.title),
+                const SizedBox(height: 8),
+                Row(children: [
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    const Text('Reporter', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    const SizedBox(height: 4),
+                    Text("Siska", style: const TextStyle(fontWeight: FontWeight.w600)),
+                  ])),
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    const Text('Category', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    const SizedBox(height: 4),
+                    Text(ticket.category, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  ])),
+                ])
+              ]),
+            )
+          ],
+        ),
       ),
     );
   }
 
   Widget _assigneeSection() {
-    return Obx(() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 8),
-        Row(children: const [Icon(Icons.person), SizedBox(width: 8), Text('Pilih Assignee')]),
-        const SizedBox(height: 8),
-        TextField(
-          onChanged: (v) => controller.assigneeSearch.value = v,
-          decoration: InputDecoration(prefixIcon: const Icon(Icons.search), hintText: 'Cari assignee...', filled: true, fillColor: const Color(0xFFF8FAFC), border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
-        ),
-        const SizedBox(height: 12),
-        ListView.separated(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (_, i) => _assigneeItem(controller.filteredAssignees[i]),
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemCount: controller.filteredAssignees.length,
-        )
-      ],
-    ));
+    return Obx(() {
+      // Make Obx reactive to selectedAssignee
+      controller.selectedAssignee.value;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          Row(children: const [Icon(Icons.person), SizedBox(width: 8), Text('Pilih Assignee')]),
+          const SizedBox(height: 8),
+          TextField(
+            onChanged: (v) => controller.assigneeSearch.value = v,
+            decoration: InputDecoration(prefixIcon: const Icon(Icons.search), hintText: 'Cari assignee...', filled: true, fillColor: const Color(0xFFF8FAFC), border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+          ),
+          const SizedBox(height: 12),
+          ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (_, i) => _assigneeItem(controller.filteredAssignees[i]),
+            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            itemCount: controller.filteredAssignees.length,
+          )
+        ],
+      );
+    });
   }
 
-  Widget _assigneeItem(a) {
+  Widget _assigneeItem(Assignee a) {
     final selected = controller.selectedAssignee.value?.id == a.id;
     return InkWell(
       onTap: () => controller.pickAssignee(a),
@@ -172,14 +184,39 @@ class AssignTicketPage extends GetView<AssignTicketController> {
   Widget _actionBar(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Text('${controller.selectedTicketCodes.length} ticket dipilih')),
-        const SizedBox(width: 8),
-        OutlinedButton(onPressed: () {
-          controller.selectedTicketCodes.clear();
-          controller.selectedAssignee.value = null;
-        }, child: const Text('Reset')),
-        const SizedBox(width: 8),
-        ElevatedButton(onPressed: controller.assignSelected, child: const Text('Assign Ticket'))
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () {
+              controller.selectedTicketCodes.clear();
+              controller.selectedAssignee.value = null;
+            },
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.red.shade700,
+              backgroundColor: Colors.red.shade50,
+              side: BorderSide(color: Colors.red.shade200),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text('Reset'),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: controller.assignSelected,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF175fa4),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text('Tugaskan Tiket'),
+          ),
+        ),
       ],
     );
   }

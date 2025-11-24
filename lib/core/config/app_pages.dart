@@ -1,3 +1,5 @@
+import 'package:airnav_helpdesk/modules/menu/menu.binding.dart';
+import 'package:airnav_helpdesk/modules/menu/menu_page.dart';
 import 'package:get/get.dart';
 
 import '../../main_binding.dart';
@@ -24,7 +26,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static final INITIAL = Routes.LOGIN;
+  static final INITIAL = Routes.ONBOARDING;
 
   static final routes = [
     GetPage(
@@ -63,6 +65,11 @@ class AppPages {
       name: _Path.CHATBOT,
       page: () => const ChatbotPage(),
       binding: ChatbotBinding(),
+    ),
+    GetPage(
+      name: _Path.MENU,
+      page: () => const MenuPage(),
+      binding: MenuBinding(),
     ),
     GetPage(
       name: _Path.ASSIGN_TICKET,
