@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import '../faq/faq_page.dart';
 class MenuController extends GetxController {
   // User Info (bisa diambil dari auth service atau local storage)
   final RxString userName = 'Budi'.obs;

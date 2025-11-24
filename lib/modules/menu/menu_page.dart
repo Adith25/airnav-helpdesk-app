@@ -1,16 +1,15 @@
 import 'package:airnav_helpdesk/core/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/config/app_pages.dart';
 import 'menu_controller.dart' as menu_ctrl;
 
-class MenuPage extends StatelessWidget {
+class MenuPage extends GetView<menu_ctrl.MenuController> {
   const MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Inject controller langsung di sini untuk menghindari error "not found"
-    final controller = Get.put(menu_ctrl.MenuController());
-    
+
     return Scaffold(
       appBar: AppBarWidget(titleText: 'Menu'),
       backgroundColor: Colors.grey[50],
@@ -312,7 +311,7 @@ class MenuPage extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          // TODO: Implement logout logic
+          Get.offAllNamed(Routes.LOGIN);
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
