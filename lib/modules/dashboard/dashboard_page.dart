@@ -154,7 +154,6 @@ class DashboardPage extends GetView<DashboardController> {
                 style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  //color: Colors.black87,
                 ),
               ),
               const SizedBox(height: 4),

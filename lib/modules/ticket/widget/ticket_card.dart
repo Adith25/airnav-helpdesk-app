@@ -212,190 +212,205 @@ class TicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Get.theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Get.theme.dividerColor),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // --- Ticket Header ---
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  ticket.code,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Get.theme.textTheme.bodyLarge?.color,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _statusColor(ticket.status),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  ticket.status,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: _statusTextColor(ticket.status),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 6),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _priorityColor(ticket.priority),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  ticket.priority,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: _priorityTextColor(ticket.priority),
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 10),
-          Text(
-            ticket.title,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Get.theme.textTheme.bodyLarge?.color,
+    return InkWell(
+      onTap: () {
+        // Navigate to detail only for 'Daftar Tiket' tab
+        if (activeTab == 'Daftar Tiket') {
+          Get.toNamed('/ticket/detail');
+        }
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Get.theme.cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Get.theme.dividerColor),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
             ),
-          ),
-
-          const SizedBox(height: 12),
-          // --- Category Info ---
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Kategori',
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // --- Ticket Header ---
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    ticket.code,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Get.theme.textTheme.bodyLarge?.color,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _statusColor(ticket.status),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    ticket.status,
                     style: TextStyle(
                       fontSize: 10,
-                      color: Get.theme.textTheme.bodySmall?.color,
+                      color: _statusTextColor(ticket.status),
                     ),
                   ),
-                  Text(
-                    ticket.category,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Get.theme.textTheme.bodyMedium?.color,
-                    ),
+                ),
+                const SizedBox(width: 6),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
                   ),
-                ],
-              ),
-              const Spacer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Sub Kategori',
+                  decoration: BoxDecoration(
+                    color: _priorityColor(ticket.priority),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    ticket.priority,
                     style: TextStyle(
                       fontSize: 10,
-                      color: Get.theme.textTheme.bodySmall?.color,
+                      color: _priorityTextColor(ticket.priority),
                     ),
                   ),
-                  Text(
-                    ticket.subCategory,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Get.theme.textTheme.bodyMedium?.color,
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+            Text(
+              ticket.title,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Get.theme.textTheme.bodyLarge?.color,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+            // --- Category Info ---
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Kategori',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Get.theme.textTheme.bodySmall?.color,
+                      ),
                     ),
+                    Text(
+                      ticket.category,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Get.theme.textTheme.bodyMedium?.color,
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Sub Kategori',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Get.theme.textTheme.bodySmall?.color,
+                      ),
+                    ),
+                    Text(
+                      ticket.subCategory,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Get.theme.textTheme.bodyMedium?.color,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+            // --- Progress Bar ---
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Progres',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Get.theme.textTheme.bodySmall?.color,
                   ),
-                ],
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-          // --- Progress Bar ---
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Progres',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Get.theme.textTheme.bodySmall?.color,
                 ),
-              ),
-              Text(
-                '${ticket.progress}%',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Get.theme.textTheme.bodyMedium?.color,
+                Text(
+                  '${ticket.progress}%',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Get.theme.textTheme.bodyMedium?.color,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Container(
-            height: 6,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(4),
+              ],
             ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: ticket.progress / 100,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: ticket.progress == 100 ? Colors.green : Colors.blue,
-                  borderRadius: BorderRadius.circular(4),
+            const SizedBox(height: 4),
+            Container(
+              height: 6,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: FractionallySizedBox(
+                alignment: Alignment.centerLeft,
+                widthFactor: ticket.progress / 100,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ticket.progress == 100 ? Colors.green : Colors.blue,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
               ),
             ),
-          ),
 
-          const SizedBox(height: 14),
-          // --- Last Update ---
-          Row(
-            children: [
-              Icon(
-                Icons.access_time,
-                size: 14,
-                color: Get.theme.textTheme.bodySmall?.color,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                ticket.lastUpdate,
-                style: TextStyle(
-                  fontSize: 10,
+            const SizedBox(height: 14),
+            // --- Last Update ---
+            Row(
+              children: [
+                Icon(
+                  Icons.access_time,
+                  size: 14,
                   color: Get.theme.textTheme.bodySmall?.color,
                 ),
-              ),
-            ],
-          ),
+                const SizedBox(width: 4),
+                Text(
+                  ticket.lastUpdate,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Get.theme.textTheme.bodySmall?.color,
+                  ),
+                ),
+              ],
+            ),
 
-          const SizedBox(height: 16),
-          // --- Action Buttons ---
-          _buildActionButtons(context),
-        ],
+            const SizedBox(height: 16),
+            // --- Action Buttons ---
+            _buildActionButtons(context),
+          ],
+        ),
       ),
     );
   }
@@ -492,25 +507,7 @@ class TicketCard extends StatelessWidget {
         );
       case 'Daftar Tiket':
       default:
-        return SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF175fa4),
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () {
-              Get.toNamed('/ticket/detail');
-            },
-            child: const Text(
-              'Lihat Detail',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        );
+        return const SizedBox.shrink();
     }
   }
 }

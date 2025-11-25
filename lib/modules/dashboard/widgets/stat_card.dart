@@ -25,7 +25,7 @@ class StatCard extends StatelessWidget {
               color: Colors.grey.shade100,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, size: 16, color: Colors.red),
+            child: Icon(icon, size: 16, color: Colors.black87),
           ),
           const Spacer(),
           FittedBox(
