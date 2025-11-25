@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:airnav_helpdesk/core/config/env_config.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,20 +50,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAdRi-iKiNDgMNHuoCKS5X_hwMKNZwj-MI',
-    appId: '1:324039190836:android:782fa62850b2d3ca351d61',
-    messagingSenderId: '324039190836',
-    projectId: 'airnav-helpdesk',
-    storageBucket: 'airnav-helpdesk.firebasestorage.app',
+  static final FirebaseOptions android = FirebaseOptions(
+    apiKey: EnvConfig.firebaseAndroidApiKey,
+    appId: EnvConfig.firebaseAndroidAppId,
+    messagingSenderId: EnvConfig.firebaseMessagingSenderId,
+    projectId: EnvConfig.firebaseProjectId,
+    storageBucket: EnvConfig.firebaseStorageBucket,
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBXBkmSUaxdQ8PjlLc18w4g6wP6D9XVXTY',
-    appId: '1:324039190836:ios:9e9c50fb6f333d93351d61',
-    messagingSenderId: '324039190836',
-    projectId: 'airnav-helpdesk',
-    storageBucket: 'airnav-helpdesk.firebasestorage.app',
-    iosBundleId: 'id.co.airnavindonesia.airnavHelpdesk',
+  static final FirebaseOptions ios = FirebaseOptions(
+    apiKey: EnvConfig.firebaseIosApiKey,
+    appId: EnvConfig.firebaseIosAppId,
+    messagingSenderId: EnvConfig.firebaseMessagingSenderId,
+    projectId: EnvConfig.firebaseProjectId,
+    storageBucket: EnvConfig.firebaseStorageBucket,
+    iosBundleId: EnvConfig.firebaseIosBundleId,
   );
 }
