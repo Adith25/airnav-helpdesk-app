@@ -1,4 +1,6 @@
+import 'package:airnav_helpdesk/modules/notification/notification_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
@@ -24,7 +26,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             children: [
                Text(
                 titleText,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -53,7 +55,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                 Icons.notifications_none,
                 color: Colors.black54,
               ),
-              onPressed: () {},
+              onPressed: () => Get.to(() => const NotificationPage()),
             ),
           ),
         ),
