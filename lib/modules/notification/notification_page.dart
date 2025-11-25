@@ -12,7 +12,7 @@ class NotificationPage extends GetView<NotificationController> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Get.theme.scaffoldBackgroundColor,
         appBar: AppBarWidget(
           titleText: 'Notifikasi',
           leading: IconButton(
@@ -23,7 +23,10 @@ class NotificationPage extends GetView<NotificationController> {
           actions: [
             IconButton(
               splashRadius: 24,
-              icon: const Icon(Icons.delete_sweep_outlined, color: Colors.white),
+              icon: const Icon(
+                Icons.delete_sweep_outlined,
+                color: Colors.white,
+              ),
               onPressed: () {
                 // TODO: Implement clear all notifications
               },
@@ -34,10 +37,7 @@ class NotificationPage extends GetView<NotificationController> {
             unselectedLabelColor: Colors.white.withOpacity(0.7),
             indicatorColor: Colors.white,
             indicatorWeight: 3,
-            tabs: [
-              _buildTab('Semua'),
-              _buildTab('Belum Dibaca'),
-            ],
+            tabs: [_buildTab('Semua'), _buildTab('Belum Dibaca')],
           ),
         ),
         body: TabBarView(
@@ -54,10 +54,7 @@ class NotificationPage extends GetView<NotificationController> {
     return Tab(
       child: Text(
         title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
       ),
     );
   }
@@ -109,8 +106,7 @@ class NotificationPage extends GetView<NotificationController> {
         iconColor: Colors.purple[800]!,
         iconBgColor: Colors.purple[100]!,
         title: 'Tiket Ditutup Otomatis',
-        message:
-            'Tiket #T2307-045 ditutup karena tidak ada balasan dari Anda.',
+        message: 'Tiket #T2307-045 ditutup karena tidak ada balasan dari Anda.',
         time: 'Kemarin',
         isUnread: false,
       ),
@@ -134,12 +130,11 @@ class NotificationPage extends GetView<NotificationController> {
       ),
     ];
 
-    final notifications =
-        showUnreadOnly
-            ? allNotifications
-                .where((n) => (n.key as ValueKey<bool>).value)
-                .toList()
-            : allNotifications;
+    final notifications = showUnreadOnly
+        ? allNotifications
+              .where((n) => (n.key as ValueKey<bool>).value)
+              .toList()
+        : allNotifications;
 
     if (notifications.isEmpty) {
       return Center(
@@ -148,20 +143,27 @@ class NotificationPage extends GetView<NotificationController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.notifications_off_outlined,
-                  size: 100, color: Colors.grey[300]),
+              Icon(
+                Icons.notifications_off_outlined,
+                size: 100,
+                color: Get.theme.disabledColor,
+              ),
               const SizedBox(height: 24),
               Text(
                 'Tidak Ada Notifikasi',
                 style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[600]),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Get.theme.textTheme.bodyLarge?.color,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Saat ini tidak ada notifikasi baru untuk Anda.',
-                style: TextStyle(fontSize: 16, color: Colors.grey[500]),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Get.theme.textTheme.bodyMedium?.color,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -171,10 +173,12 @@ class NotificationPage extends GetView<NotificationController> {
     }
 
     // Separate lists for read and unread
-    final unreadNotifications =
-        notifications.where((n) => (n.key as ValueKey<bool>).value).toList();
-    final readNotifications =
-        notifications.where((n) => !(n.key as ValueKey<bool>).value).toList();
+    final unreadNotifications = notifications
+        .where((n) => (n.key as ValueKey<bool>).value)
+        .toList();
+    final readNotifications = notifications
+        .where((n) => !(n.key as ValueKey<bool>).value)
+        .toList();
 
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -194,34 +198,38 @@ class NotificationPage extends GetView<NotificationController> {
 
   Padding _buildDateHeader(String title) {
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: 16.0).copyWith(bottom: 16.0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+      ).copyWith(bottom: 16.0),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Colors.black87,
+          color: Get.theme.textTheme.bodyLarge?.color,
         ),
       ),
     );
   }
 
-  Widget _buildNotificationItem(
-      {required IconData icon,
-      required Color iconColor,
-      required Color iconBgColor,
-      required String title,
-      required String message,
-      required String time,
-      required bool isUnread}) {
+  Widget _buildNotificationItem({
+    required IconData icon,
+    required Color iconColor,
+    required Color iconBgColor,
+    required String title,
+    required String message,
+    required String time,
+    required bool isUnread,
+  }) {
     return Container(
       key: ValueKey(isUnread),
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
       decoration: BoxDecoration(
-        color: isUnread ? Colors.white : const Color(0xFFF8F9FA),
+        color: isUnread
+            ? Get.theme.cardColor
+            : (Get.isDarkMode ? Colors.grey[900] : const Color(0xFFF8F9FA)),
         borderRadius: BorderRadius.circular(12.0),
-        border: isUnread ? null : Border.all(color: Colors.grey[200]!),
+        border: isUnread ? null : Border.all(color: Get.theme.dividerColor),
         boxShadow: isUnread
             ? [
                 BoxShadow(
@@ -259,17 +267,17 @@ class NotificationPage extends GetView<NotificationController> {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Color(0xFF343A40),
+                          color: Get.theme.textTheme.bodyLarge?.color,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         message,
                         style: TextStyle(
-                          color: Colors.grey[700],
+                          color: Get.theme.textTheme.bodyMedium?.color,
                           fontSize: 14,
                           height: 1.4,
                         ),
@@ -285,7 +293,7 @@ class NotificationPage extends GetView<NotificationController> {
                     Text(
                       time,
                       style: TextStyle(
-                        color: Colors.grey[500],
+                        color: Get.theme.textTheme.bodySmall?.color,
                         fontSize: 12,
                       ),
                     ),
@@ -294,8 +302,8 @@ class NotificationPage extends GetView<NotificationController> {
                       Container(
                         width: 10,
                         height: 10,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF0D47A1),
+                        decoration: BoxDecoration(
+                          color: Get.theme.primaryColor,
                           shape: BoxShape.circle,
                         ),
                       ),

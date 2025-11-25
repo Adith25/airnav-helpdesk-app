@@ -40,16 +40,14 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               const SizedBox(height: 2),
               const Text(
                 'Helpdesk AIRNAV',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white70,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.white70),
               ),
             ],
           ),
         ],
       ),
-      actions: actions ??
+      actions:
+          actions ??
           [
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
