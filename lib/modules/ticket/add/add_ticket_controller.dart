@@ -71,8 +71,8 @@ class AddTicketController extends GetxController {
 
         if (hasLargeFile) {
           Get.snackbar(
-            'Ukuran Berkas Terlalu Besar',
-            'Beberapa berkas dilewati karena melebihi 10MB.',
+            'file_limit_exceeded'.tr,
+            'file_limit_desc'.tr,
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.orange,
             colorText: Colors.white,
@@ -81,18 +81,7 @@ class AddTicketController extends GetxController {
         }
       }
     } catch (e) {
-      if (e.toString().contains('MissingPluginException')) {
-        Get.snackbar(
-          'Diperlukan Mulai Ulang Aplikasi',
-          'Mohon berhenti dan mulai ulang aplikasi untuk mengaktifkan pemilihan berkas.',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 5),
-        );
-      } else {
-        Get.snackbar('Kesalahan', 'Gagal memilih berkas: $e');
-      }
+      Get.snackbar('error_title'.tr, 'failed_pick_files'.trParams({'error': e.toString()}));
     }
   }
 
@@ -108,24 +97,24 @@ class AddTicketController extends GetxController {
         final dashboardController = Get.find<DashboardController>();
 
         final newRequest = HelpRequest(
-          name: 'Pengguna Saat Ini',
+          name: 'current_user'.tr,
           title: subjectController.text,
-          date: 'Baru saja',
-          responseDue: 'Batas respons dalam 24 jam',
+          date: 'just_now'.tr,
+          responseDue: 'response_due_24h'.tr,
           tags: [
-            'Sedang',
-            '${selectedDepartment.value} / Umum',
+            'medium'.tr,
+            '${selectedDepartment.value} / ${'general'.tr}',
           ],
-          status: 'Terbuka',
-          highlight: 'BARU',
+          status: 'open'.tr,
+          highlight: 'new'.tr,
           description: descriptionController.text,
         );
 
         dashboardController.requests.insert(0, newRequest);
 
         Get.snackbar(
-          'Berhasil',
-          'Tiket berhasil dikirim!',
+          'success_title'.tr,
+          'ticket_submitted'.tr,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green,
           colorText: Colors.white,
@@ -136,15 +125,15 @@ class AddTicketController extends GetxController {
         Get.back();
       } catch (e) {
         Get.snackbar(
-          'Kesalahan',
-          'Tidak dapat mengirim tiket. Pengendali dasbor tidak ditemukan.',
+          'error_title'.tr,
+          'submit_error_desc'.tr,
           snackPosition: SnackPosition.BOTTOM,
         );
       }
     } else {
       Get.snackbar(
-        'Kesalahan',
-        'Mohon isi semua kolom yang wajib diisi.',
+        'error_title'.tr,
+        'fill_required_fields'.tr,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,

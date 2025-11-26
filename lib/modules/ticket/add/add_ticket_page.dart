@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -415,7 +417,7 @@ class AddTicketPage extends GetView<AddTicketController> {
             ),
             child: Text(
               'submit_ticket'.tr,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -439,7 +441,7 @@ class AddTicketPage extends GetView<AddTicketController> {
             ),
             child: Text(
               'reset_form'.tr,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
           ),
         ),
