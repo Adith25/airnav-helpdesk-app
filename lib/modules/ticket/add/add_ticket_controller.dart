@@ -7,24 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddTicketController extends GetxController {
-  // Dropdown values
   final Rxn<String> selectedDepartment = Rxn<String>();
   final Rxn<String> selectedCategory = Rxn<String>();
   final Rxn<String> selectedSubCategory = Rxn<String>();
   final Rxn<String> selectedSource = Rxn<String>();
 
-  // Text Controllers
   final TextEditingController subjectController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
-  // Attachments
   final RxList<File> selectedFiles = <File>[].obs;
 
-  // Dropdown items - using dummy data for now
-  final List<String> departments = ['IT', 'HR', 'Finance', 'Teknik'];
-  final List<String> categories = ['Permintaan', 'Insiden'];
+  final List<String> departments = ['IT', 'SDM', 'Keuangan', 'Teknik'];
+  final List<String> categories = ['Permintaan Layanan', 'Insiden'];
   final List<String> subCategories = ['Akses Wifi', 'Kerusakan Printer'];
-  final List<String> sources = ['Portal', 'Email', 'Phone', 'Direct'];
+  final List<String> sources = ['Portal', 'Email', 'Telepon', 'Langsung'];
 
   void onDepartmentChanged(String? value) {
     selectedDepartment.value = value;
@@ -32,7 +28,6 @@ class AddTicketController extends GetxController {
 
   void onCategoryChanged(String? value) {
     selectedCategory.value = value;
-    // You might want to reset or filter sub-categories here
     selectedSubCategory.value = null;
   }
 
@@ -59,9 +54,7 @@ class AddTicketController extends GetxController {
         for (var path in result.paths) {
           if (path != null) {
             final file = File(path);
-            // Get file length in bytes
             final int sizeInBytes = await file.length();
-            // Convert to MB
             final double sizeInMB = sizeInBytes / (1024 * 1024);
 
             if (sizeInMB <= 10) {
@@ -78,8 +71,8 @@ class AddTicketController extends GetxController {
 
         if (hasLargeFile) {
           Get.snackbar(
-            'File Limit Exceeded',
-            'Some files were skipped because they exceed 10MB.',
+            'Ukuran Berkas Terlalu Besar',
+            'Beberapa berkas dilewati karena melebihi 10MB.',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.orange,
             colorText: Colors.white,
@@ -88,18 +81,17 @@ class AddTicketController extends GetxController {
         }
       }
     } catch (e) {
-      // Check for MissingPluginException which occurs after adding new native plugins without a restart
       if (e.toString().contains('MissingPluginException')) {
         Get.snackbar(
-          'App Restart Required',
-          'Please stop and restart the app to enable file picking.',
+          'Diperlukan Mulai Ulang Aplikasi',
+          'Mohon berhenti dan mulai ulang aplikasi untuk mengaktifkan pemilihan berkas.',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.orange,
           colorText: Colors.white,
           duration: const Duration(seconds: 5),
         );
       } else {
-        Get.snackbar('Error', 'Failed to pick files: $e');
+        Get.snackbar('Kesalahan', 'Gagal memilih berkas: $e');
       }
     }
   }
@@ -112,50 +104,47 @@ class AddTicketController extends GetxController {
     if (selectedDepartment.value != null &&
         selectedCategory.value != null &&
         subjectController.text.isNotEmpty) {
-      // Find DashboardController to add the new request
       try {
         final dashboardController = Get.find<DashboardController>();
 
         final newRequest = HelpRequest(
-          name: 'Current User', // Mock user
+          name: 'Pengguna Saat Ini',
           title: subjectController.text,
-          date: 'Just now',
-          responseDue: 'Response due in 24 hours',
+          date: 'Baru saja',
+          responseDue: 'Batas respons dalam 24 jam',
           tags: [
-            'Medium', // Default priority since field is removed
-            '${selectedDepartment.value} / General', // Default pipeline
+            'Sedang',
+            '${selectedDepartment.value} / Umum',
           ],
-          status: 'Open',
-          highlight: 'NEW',
+          status: 'Terbuka',
+          highlight: 'BARU',
           description: descriptionController.text,
         );
 
         dashboardController.requests.insert(0, newRequest);
 
         Get.snackbar(
-          'Success',
-          'Ticket submitted successfully!',
+          'Berhasil',
+          'Tiket berhasil dikirim!',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
 
-        // Clear form
         _clearForm();
 
-        // Navigate back
         Get.back();
       } catch (e) {
         Get.snackbar(
-          'Error',
-          'Could not submit ticket. Dashboard controller not found.',
+          'Kesalahan',
+          'Tidak dapat mengirim tiket. Pengendali dasbor tidak ditemukan.',
           snackPosition: SnackPosition.BOTTOM,
         );
       }
     } else {
       Get.snackbar(
-        'Error',
-        'Please fill all required fields.',
+        'Kesalahan',
+        'Mohon isi semua kolom yang wajib diisi.',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,

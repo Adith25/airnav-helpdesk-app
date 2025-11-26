@@ -110,7 +110,7 @@ class AddTicketPage extends GetView<AddTicketController> {
             child: Column(
               children: [
                 _buildDropdown(
-                  'Channel',
+                  'Kanal',
                   controller.selectedDepartment,
                   controller.departments,
                   controller.onDepartmentChanged,
@@ -131,21 +131,21 @@ class AddTicketPage extends GetView<AddTicketController> {
                 ),
                 const SizedBox(height: 16),
                 _buildDropdown(
-                  'Source',
+                  'Sumber',
                   controller.selectedSource,
                   controller.sources,
                   controller.onSourceChanged,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
-                  label: 'Subject Masalah',
-                  hint: 'Problem Summary',
+                  label: 'Subjek Masalah',
+                  hint: 'Ringkasan Masalah',
                   controller: controller.subjectController,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
                   label: 'Deskripsi Masalah',
-                  hint: 'Jelaskan masalah Anda secara detail...',
+                  hint: 'Jelaskan masalah Anda secara rinci...',
                   maxLines: 4,
                   controller: controller.descriptionController,
                 ),
@@ -190,7 +190,7 @@ class AddTicketPage extends GetView<AddTicketController> {
           decoration: InputDecoration(
             filled: true,
             fillColor:
-            Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
+                Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -206,23 +206,23 @@ class AddTicketPage extends GetView<AddTicketController> {
   }
 
   Widget _buildDropdown(
-      String label,
-      Rxn<String> value,
-      List<String> items,
-      ValueChanged<String?> onChanged,
-      ) {
+    String label,
+    Rxn<String> value,
+    List<String> items,
+    ValueChanged<String?> onChanged,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLabel(label),
         const SizedBox(height: 8),
         Obx(
-              () => DropdownButtonFormField<String>(
+          () => DropdownButtonFormField<String>(
             value: value.value,
             decoration: InputDecoration(
               filled: true,
               fillColor:
-              Get.theme.inputDecorationTheme.fillColor ??
+                  Get.theme.inputDecorationTheme.fillColor ??
                   Get.theme.cardColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -281,7 +281,7 @@ class AddTicketPage extends GetView<AddTicketController> {
             hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
             filled: true,
             fillColor:
-            Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
+                Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey.shade300),
@@ -333,7 +333,7 @@ class AddTicketPage extends GetView<AddTicketController> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Klik untuk upload',
+                  'Klik untuk unggah',
                   style: TextStyle(
                     color: Get.theme.colorScheme.primary,
                     fontWeight: FontWeight.bold,
@@ -342,58 +342,57 @@ class AddTicketPage extends GetView<AddTicketController> {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  'PNG, JPG, PDF, DOC (MAX. 10MB)',
+                  'PNG, JPG, PDF, DOC (MAKS. 10MB)',
                   style: TextStyle(color: Colors.grey, fontSize: 11),
                 ),
               ],
             ),
           ),
         ),
-        // Display list of selected files
         Obx(
-              () =>
-          controller.selectedFiles.isNotEmpty
-              ? Column(
-            children: [
-              const SizedBox(height: 12),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.selectedFiles.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  final file = controller.selectedFiles[index];
-                  return Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey.shade300),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.attach_file, size: 20, color: Colors.grey.shade700),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            file.path.split('/').last,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 13),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () => controller.removeFile(index),
-                          child: const Icon(Icons.close, size: 18, color: Colors.red),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          )
-              : const SizedBox.shrink(),
+          () =>
+              controller.selectedFiles.isNotEmpty
+                  ? Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: controller.selectedFiles.length,
+                        separatorBuilder: (context, index) => const SizedBox(height: 8),
+                        itemBuilder: (context, index) {
+                          final file = controller.selectedFiles[index];
+                          return Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.grey.shade300),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.attach_file, size: 20, color: Colors.grey.shade700),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    file.path.split('/').last,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () => controller.removeFile(index),
+                                  child: const Icon(Icons.close, size: 18, color: Colors.red),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  )
+                  : const SizedBox.shrink(),
         ),
       ],
     );
@@ -413,7 +412,7 @@ class AddTicketPage extends GetView<AddTicketController> {
               ),
             ),
             child: const Text(
-              'Submit Ticket',
+              'Kirim Tiket',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -437,7 +436,7 @@ class AddTicketPage extends GetView<AddTicketController> {
               side: BorderSide(color: Colors.grey.shade300, width: 1.5),
             ),
             child: const Text(
-              'Reset Form',
+              'Atur Ulang Formulir',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
           ),
