@@ -130,53 +130,81 @@ class _TicketListPageState extends State<TicketListPage>
     required Function(String) onChanged,
   }) {
     return Expanded(
-      child: Obx(() {
-        final reactiveValue = (label == "Status")
-            ? controller.statusFilter.value
-            : (label == "Priority")
-            ? controller.priorityFilter.value
-            : controller.sortOption.value;
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Obx(() {
+            final reactiveValue = (label == "Status")
+                ? controller.statusFilter.value
+                : (label == "Priority")
+                ? controller.priorityFilter.value
+                : controller.sortOption.value;
 
-        return DropdownButtonFormField<String>(
-          isExpanded: true,
-          value: reactiveValue.isEmpty ? null : reactiveValue,
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: const TextStyle(fontSize: 12),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 8,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF135CA1),
-                width: 1.5,
+            return PopupMenuButton<String>(
+              offset: const Offset(0, 50),
+              onSelected: (val) => onChanged(val),
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
               ),
-            ),
-            filled: true,
-            fillColor: Get.theme.cardColor,
-          ),
-          icon: const Icon(Icons.arrow_drop_down, size: 20),
-          items: items
-              .map(
-                (e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e.isEmpty ? 'All' : e),
+              itemBuilder: (BuildContext context) {
+                return items.map((String item) {
+                  final isSelected =
+                      (item.isEmpty && reactiveValue.isEmpty) ||
+                          item == reactiveValue;
+                  return PopupMenuItem<String>(
+                    value: item,
+                    padding: EdgeInsets.zero,
+                    child: Container(
+                      width: constraints.maxWidth,
+                      color: isSelected ? Colors.grey[200] : Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 12.0),
+                      child: Text(item.isEmpty ? 'All' : item),
+                    ),
+                  );
+                }).toList();
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: label,
+                  labelStyle: const TextStyle(fontSize: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF135CA1),
+                      width: 1.5,
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: Get.theme.cardColor,
                 ),
-              )
-              .toList(),
-          onChanged: (val) => onChanged(val ?? ''),
-        );
-      }),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      reactiveValue.isEmpty ? 'All' : reactiveValue,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const Icon(Icons.arrow_drop_down, size: 20),
+                  ],
+                ),
+              ),
+            );
+          });
+        },
+      ),
     );
   }
 
