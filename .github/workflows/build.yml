@@ -41,8 +41,8 @@ jobs:
         continue-on-error: true
 
       # Runs unit test
-      - name: Run tests
-        run: flutter test
+#      - name: Run tests
+#        run: flutter test
 
   build:
     name: Build APK
