@@ -6,10 +6,8 @@ import 'package:get/get.dart';
 class AddTicketController extends GetxController {
   // Dropdown values
   final Rxn<String> selectedDepartment = Rxn<String>();
-  final Rxn<String> selectedSubDepartment = Rxn<String>();
   final Rxn<String> selectedCategory = Rxn<String>();
   final Rxn<String> selectedSubCategory = Rxn<String>();
-  final Rxn<String> selectedPriority = Rxn<String>();
   final Rxn<String> selectedSource = Rxn<String>();
 
   // Text Controllers
@@ -18,20 +16,12 @@ class AddTicketController extends GetxController {
 
   // Dropdown items - using dummy data for now
   final List<String> departments = ['IT', 'HR', 'Finance', 'Teknik'];
-  final List<String> subDepartments = ['Jaringan', 'Software', 'Hardware'];
   final List<String> categories = ['Permintaan', 'Insiden'];
   final List<String> subCategories = ['Akses Wifi', 'Kerusakan Printer'];
-  final List<String> priorities = ['Low', 'Medium', 'High', 'Urgent'];
   final List<String> sources = ['Portal', 'Email', 'Phone', 'Direct'];
 
   void onDepartmentChanged(String? value) {
     selectedDepartment.value = value;
-    // You might want to reset or filter sub-departments here
-    selectedSubDepartment.value = null;
-  }
-
-  void onSubDepartmentChanged(String? value) {
-    selectedSubDepartment.value = value;
   }
 
   void onCategoryChanged(String? value) {
@@ -44,10 +34,6 @@ class AddTicketController extends GetxController {
     selectedSubCategory.value = value;
   }
 
-  void onPriorityChanged(String? value) {
-    selectedPriority.value = value;
-  }
-
   void onSourceChanged(String? value) {
     selectedSource.value = value;
   }
@@ -55,10 +41,8 @@ class AddTicketController extends GetxController {
   void submitTicket() {
     if (selectedDepartment.value != null &&
         selectedCategory.value != null &&
-        selectedPriority.value != null &&
         subjectController.text.isNotEmpty) {
       // Find DashboardController to add the new request
-      // In a real app, this might be handled by a repository or service
       try {
         final dashboardController = Get.find<DashboardController>();
 
@@ -68,8 +52,8 @@ class AddTicketController extends GetxController {
           date: 'Just now',
           responseDue: 'Response due in 24 hours',
           tags: [
-            selectedPriority.value!,
-            '${selectedDepartment.value} / ${selectedSubDepartment.value ?? "General"}',
+            'Medium', // Default priority since field is removed
+            '${selectedDepartment.value} / General', // Default pipeline
           ],
           status: 'Open',
           highlight: 'NEW',
@@ -111,10 +95,8 @@ class AddTicketController extends GetxController {
 
   void _clearForm() {
     selectedDepartment.value = null;
-    selectedSubDepartment.value = null;
     selectedCategory.value = null;
     selectedSubCategory.value = null;
-    selectedPriority.value = null;
     selectedSource.value = null;
     subjectController.clear();
     descriptionController.clear();

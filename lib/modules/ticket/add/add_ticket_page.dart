@@ -115,13 +115,6 @@ class AddTicketPage extends GetView<AddTicketController> {
                 ),
                 const SizedBox(height: 16),
                 _buildDropdown(
-                  'Pipeline',
-                  controller.selectedSubDepartment,
-                  controller.subDepartments,
-                  controller.onSubDepartmentChanged,
-                ),
-                const SizedBox(height: 16),
-                _buildDropdown(
                   'Kategori Masalah',
                   controller.selectedCategory,
                   controller.categories,
@@ -136,13 +129,6 @@ class AddTicketPage extends GetView<AddTicketController> {
                 ),
                 const SizedBox(height: 16),
                 _buildDropdown(
-                  'Prioritas',
-                  controller.selectedPriority,
-                  controller.priorities,
-                  controller.onPriorityChanged,
-                ),
-                const SizedBox(height: 16),
-                _buildDropdown(
                   'Source',
                   controller.selectedSource,
                   controller.sources,
@@ -151,7 +137,7 @@ class AddTicketPage extends GetView<AddTicketController> {
                 const SizedBox(height: 16),
                 _buildTextField(
                   label: 'Subject Masalah',
-                  hint: 'problem_summary',
+                  hint: 'Problem Summary',
                   controller: controller.subjectController,
                 ),
                 const SizedBox(height: 16),
@@ -161,8 +147,6 @@ class AddTicketPage extends GetView<AddTicketController> {
                   maxLines: 4,
                   controller: controller.descriptionController,
                 ),
-                const SizedBox(height: 16),
-                _buildDueDatePicker(),
                 const SizedBox(height: 16),
                 _buildAttachmentPicker(),
                 const SizedBox(height: 24),
@@ -204,7 +188,7 @@ class AddTicketPage extends GetView<AddTicketController> {
           decoration: InputDecoration(
             filled: true,
             fillColor:
-                Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
+            Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -220,23 +204,23 @@ class AddTicketPage extends GetView<AddTicketController> {
   }
 
   Widget _buildDropdown(
-    String label,
-    Rxn<String> value,
-    List<String> items,
-    ValueChanged<String?> onChanged,
-  ) {
+      String label,
+      Rxn<String> value,
+      List<String> items,
+      ValueChanged<String?> onChanged,
+      ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLabel(label),
         const SizedBox(height: 8),
         Obx(
-          () => DropdownButtonFormField<String>(
+              () => DropdownButtonFormField<String>(
             value: value.value,
             decoration: InputDecoration(
               filled: true,
               fillColor:
-                  Get.theme.inputDecorationTheme.fillColor ??
+              Get.theme.inputDecorationTheme.fillColor ??
                   Get.theme.cardColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -295,7 +279,7 @@ class AddTicketPage extends GetView<AddTicketController> {
             hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
             filled: true,
             fillColor:
-                Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
+            Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey.shade300),
