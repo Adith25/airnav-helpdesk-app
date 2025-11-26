@@ -53,10 +53,54 @@ class AddTicketController extends GetxController {
       );
 
       if (result != null) {
-        selectedFiles.addAll(result.paths.map((path) => File(path!)).toList());
+        List<File> validFiles = [];
+        bool hasLargeFile = false;
+
+        for (var path in result.paths) {
+          if (path != null) {
+            final file = File(path);
+            // Get file length in bytes
+            final int sizeInBytes = await file.length();
+            // Convert to MB
+            final double sizeInMB = sizeInBytes / (1024 * 1024);
+
+            if (sizeInMB <= 10) {
+              validFiles.add(file);
+            } else {
+              hasLargeFile = true;
+            }
+          }
+        }
+
+        if (validFiles.isNotEmpty) {
+          selectedFiles.addAll(validFiles);
+        }
+
+        if (hasLargeFile) {
+          Get.snackbar(
+            'File Limit Exceeded',
+            'Some files were skipped because they exceed 10MB.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.orange,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 4),
+          );
+        }
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to pick files: $e');
+      // Check for MissingPluginException which occurs after adding new native plugins without a restart
+      if (e.toString().contains('MissingPluginException')) {
+        Get.snackbar(
+          'App Restart Required',
+          'Please stop and restart the app to enable file picking.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 5),
+        );
+      } else {
+        Get.snackbar('Error', 'Failed to pick files: $e');
+      }
     }
   }
 
