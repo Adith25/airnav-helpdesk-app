@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:airnav_helpdesk/modules/dashboard/dashboard_controller.dart';
 import 'package:airnav_helpdesk/modules/dashboard/models/help_request.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +16,9 @@ class AddTicketController extends GetxController {
   // Text Controllers
   final TextEditingController subjectController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+
+  // Attachments
+  final RxList<File> selectedFiles = <File>[].obs;
 
   // Dropdown items - using dummy data for now
   final List<String> departments = ['IT', 'HR', 'Finance', 'Teknik'];
@@ -36,6 +42,26 @@ class AddTicketController extends GetxController {
 
   void onSourceChanged(String? value) {
     selectedSource.value = value;
+  }
+
+  Future<void> pickFiles() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+      );
+
+      if (result != null) {
+        selectedFiles.addAll(result.paths.map((path) => File(path!)).toList());
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to pick files: $e');
+    }
+  }
+
+  void removeFile(int index) {
+    selectedFiles.removeAt(index);
   }
 
   void submitTicket() {
@@ -100,6 +126,7 @@ class AddTicketController extends GetxController {
     selectedSource.value = null;
     subjectController.clear();
     descriptionController.clear();
+    selectedFiles.clear();
   }
 
   @override
