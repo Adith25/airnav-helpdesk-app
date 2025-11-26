@@ -39,7 +39,7 @@ class LoginPage extends GetView<LoginController> {
                       ),
                       const SizedBox(height: 32),
                       Text(
-                        'Airnav Helpdesk',
+                        'app_title'.tr,
                         style: ShadTheme.of(context).textTheme.h2.copyWith(
                           color: Get.theme.colorScheme.primary,
                         ),
@@ -47,14 +47,14 @@ class LoginPage extends GetView<LoginController> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Mohon login untuk melanjutkan',
+                        'login_subtitle'.tr,
                         style: ShadTheme.of(context).textTheme.muted,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 48),
                       ShadInput(
                         controller: controller.personnelNumberController,
-                        placeholder: const Text('NIK'),
+                        placeholder: Text('nik_placeholder'.tr),
                         leading: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Icon(Icons.person_outline),
@@ -64,7 +64,7 @@ class LoginPage extends GetView<LoginController> {
                       Obx(
                         () => ShadInput(
                           controller: controller.passwordController,
-                          placeholder: const Text('Password'),
+                          placeholder: Text('password_placeholder'.tr),
                           leading: const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Icon(Icons.lock_outline),
@@ -91,7 +91,7 @@ class LoginPage extends GetView<LoginController> {
                           onPressed: () {
                             // Implement forgot password logic
                           },
-                          child: const Text('Lupa Kata Sandi?'),
+                          child: Text('forgot_password'.tr),
                         ),
                       ),
                       const SizedBox(height: 32),
@@ -112,9 +112,9 @@ class LoginPage extends GetView<LoginController> {
                                     // The theme will color this appropriately
                                   ),
                                 )
-                              : const Text(
-                                  'Login',
-                                  style: TextStyle(fontSize: 16),
+                              : Text(
+                                  'login_button'.tr,
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                         ),
                       ),
