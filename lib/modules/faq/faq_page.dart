@@ -178,7 +178,23 @@ class FaqPage extends GetView<FaqController> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 8),
+                  Obx(
+                    () => IconButton(
+                      icon: Icon(
+                        controller.isBookmarked(item.id)
+                            ? Icons.bookmark
+                            : Icons.bookmark_border,
+                        color: controller.isBookmarked(item.id)
+                            ? Get.theme.colorScheme.primary
+                            : Get.theme.textTheme.bodyMedium?.color,
+                      ),
+                      onPressed: () => controller.toggleBookmark(item.id),
+                      splashRadius: 20,
+                      iconSize: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
                   Icon(
                     item.isExpanded
                         ? Icons.keyboard_arrow_up_rounded
