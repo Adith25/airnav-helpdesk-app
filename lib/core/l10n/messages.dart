@@ -105,6 +105,7 @@ class Messages extends Translations {
       // FAQ
       'faq_title': 'FAQ',
       'search_faq_hint': 'Search FAQ...',
+      'faq_cat_bookmarked': 'Bookmarked',
       'faq_cat_it': 'IT',
       'faq_cat_hr': 'HR',
       'faq_cat_legal': 'Legal',
@@ -295,6 +296,7 @@ class Messages extends Translations {
       // FAQ
       'faq_title': 'FAQ',
       'search_faq_hint': 'Cari FAQ...',
+      'faq_cat_bookmarked': 'Tersimpan',
       'faq_cat_it': 'IT',
       'faq_cat_hr': 'SDM',
       'faq_cat_legal': 'Legal',
@@ -347,7 +349,6 @@ class Messages extends Translations {
       'filter_priority': 'Prioritas',
       'filter_sort': 'Urutkan',
       'status_all': 'Semua',
-      'status_done': 'Selesai',
       'status_in_progress': 'Dalam Proses',
       'status_assigned': 'Ditugaskan',
       'status_new': 'Baru',
