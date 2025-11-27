@@ -59,7 +59,7 @@ class _TicketListPageState extends State<TicketListPage>
       body: Column(
         children: [
           const SizedBox(height: 8),
-          _buildTabs(), // Now uses a standard TabBar for smooth animation
+          _buildTabs(),
           const SizedBox(height: 8),
           SearchField(
             onChanged: controller.onSearch,
@@ -70,15 +70,15 @@ class _TicketListPageState extends State<TicketListPage>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: controller.tabs.map((_) {
+              children: controller.tabs.map((tabName) {
                 return Obx(() {
-                  final list = controller.tickets;
+                  final list = controller.getTicketsForTab(tabName);
                   return ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: list.length,
                     itemBuilder: (_, i) => TicketCard(
                       ticket: list[i],
-                      activeTab: controller.activeTab.value,
+                      activeTab: tabName,
                     ),
                   );
                 });
@@ -229,49 +229,40 @@ class _TicketListPageState extends State<TicketListPage>
     return value;
   }
 
-  Widget _tabItem(String title, bool isActive, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        margin: const EdgeInsets.only(right: 8),
-        decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF135CA1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isActive ? const Color(0xFF135CA1) : Colors.grey.shade300,
-          ),
-        ),
-        child: Text(
-          title,
-          style: GoogleFonts.poppins(
-            fontSize: 12,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-            color: isActive ? Colors.white : Colors.grey.shade600,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildTabs() {
-    return Obx(
-          () => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: controller.tabs
-                .map(
-                  (tab) => _tabItem(
-                tab.tr,
-                controller.activeTab.value == tab,
-                    () => controller.changeTab(tab),
-              ),
-            )
-                .toList(),
-          ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: TabBar(
+        controller: _tabController,
+        isScrollable: true,
+        tabAlignment: TabAlignment.start,
+
+        // TEXT STYLE
+        labelColor: const Color(0xFF135CA1),
+        unselectedLabelColor: const Color(0xFF475569),
+        labelStyle: GoogleFonts.poppins(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
         ),
+        unselectedLabelStyle: GoogleFonts.poppins(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
+
+        // PADDING agar tab tidak tinggi
+        labelPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+
+        // INDICATOR SLIDING BIRU
+        indicatorColor: const Color(0xFF135CA1),
+        indicatorWeight: 2,
+        indicatorSize: TabBarIndicatorSize.label,
+
+        // Remove ripple/splash biar smooth
+        splashFactory: NoSplash.splashFactory,
+        overlayColor: MaterialStateProperty.all(Colors.transparent),
+
+        // MENAMPILKAN TAB SESUAI NAMA
+        tabs: controller.tabs.map((tab) => Tab(text: tab.tr)).toList(),
       ),
     );
   }

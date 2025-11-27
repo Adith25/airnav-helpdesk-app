@@ -8,7 +8,6 @@ import 'package:get_storage/get_storage.dart';
 import 'core/l10n/messages.dart';
 import 'core/services/localization_service.dart';
 import 'core/theme/app_theme.dart';
-import 'core/services/notification_service.dart';
 import 'core/utils/firebase_utils.dart';
 import 'l10n/app_localizations.dart';
 
