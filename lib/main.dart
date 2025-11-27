@@ -4,7 +4,6 @@ import 'package:airnav_helpdesk/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'core/l10n/messages.dart';
 import 'core/services/localization_service.dart';
 import 'core/theme/app_theme.dart';
@@ -13,16 +12,12 @@ import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // final initialMessage = await FirebaseUtils.setupFirebaseNotifications();
-
-  await GetStorage.init();
+  final initialMessage = await FirebaseUtils.setupFirebaseNotifications();
   await GetStorage.init();
   Get.put(ThemeService());
   Get.put(LocalizationService());
   runApp(MainApp());
-
-  // FirebaseUtils.handleInitialMessage(initialMessage);
+  FirebaseUtils.handleInitialMessage(initialMessage);
 }
 
 class MainApp extends StatelessWidget {
@@ -32,17 +27,14 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeService = Get.find<ThemeService>();
 
-    // Wrap dengan Obx agar reactive terhadap perubahan theme
     return Obx(() {
-      // IMPORTANT: Access isDarkModeRx.value directly to register reactive dependency
       final isDark = themeService.isDarkModeRx.value;
-      // Access refreshKey to force rebuild when it changes
       final key = themeService.refreshKey.value;
 
       return ShadTheme(
         data: isDark ? AppTheme.shadDark : AppTheme.shadLight,
         child: GetMaterialApp(
-          key: ValueKey(key), // Force rebuild when key changes
+          key: ValueKey(key),
           title: 'Helpdesk',
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
