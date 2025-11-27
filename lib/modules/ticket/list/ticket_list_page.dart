@@ -118,7 +118,7 @@ class _TicketListPageState extends State<TicketListPage>
           _filterDropdown(
             label: "filter_sort".tr,
             value: controller.sortOption.value,
-            items: const ['date_desc', 'date_asc', 'priority', 'progress'],
+            items: const ['', 'date_desc', 'date_asc', 'priority', 'progress'],
             onChanged: controller.setSortOption,
           ),
         ],
@@ -137,55 +137,72 @@ class _TicketListPageState extends State<TicketListPage>
         final reactiveValue = (label == "filter_status".tr)
             ? controller.statusFilter.value
             : (label == "filter_priority".tr)
-            ? controller.priorityFilter.value
-            : controller.sortOption.value;
+                ? controller.priorityFilter.value
+                : controller.sortOption.value;
 
-        return DropdownButtonFormField<String>(
-          isExpanded: true,
-          value: reactiveValue.isEmpty ? null : reactiveValue,
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: const TextStyle(fontSize: 12),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 8,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF135CA1),
-                width: 1.5,
+        return PopupMenuButton<String>(
+          offset: const Offset(0, 50), // This provides the vertical offset
+          color: Colors.white, // Set dropdown menu color to white
+          onSelected: onChanged,
+          itemBuilder: (context) {
+            return items.map((itemValue) {
+              return PopupMenuItem<String>(
+                value: itemValue,
+                child: Text(_getLocalizedValue(itemValue, label)),
+              );
+            }).toList();
+          },
+          child: InputDecorator(
+            decoration: InputDecoration(
+              labelText: label,
+              labelStyle: const TextStyle(fontSize: 14),
+              floatingLabelStyle: const TextStyle(fontSize: 16),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
               ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(
+                  color: Color(0xFF135CA1),
+                  width: 1.5,
+                ),
+              ),
+              filled: true,
+              fillColor: Colors.white, // Set field color to white
             ),
-            filled: true,
-            fillColor: Get.theme.cardColor,
+            isEmpty: reactiveValue.isEmpty,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    reactiveValue.isEmpty
+                        ? ''
+                        : _getLocalizedValue(reactiveValue, label),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Icon(Icons.arrow_drop_down, size: 20),
+              ],
+            ),
           ),
-          icon: const Icon(Icons.arrow_drop_down, size: 20),
-          items: items
-              .map(
-                (e) => DropdownMenuItem(
-              value: e,
-              child: Text(_getLocalizedValue(e, label)),
-            ),
-          )
-              .toList(),
-          onChanged: (val) => onChanged(val ?? ''),
         );
       }),
     );
   }
 
   String _getLocalizedValue(String value, String label) {
+    // The "All" option has an empty string value.
     if (value.isEmpty) return 'status_all'.tr;
 
+    // For other values, find the correct translation.
     if (label == 'filter_status'.tr) {
       switch (value) {
         case 'Done':
@@ -196,8 +213,6 @@ class _TicketListPageState extends State<TicketListPage>
           return 'status_assigned'.tr;
         case 'New':
           return 'status_new'.tr;
-        default:
-          return value;
       }
     } else if (label == 'filter_priority'.tr) {
       switch (value) {
@@ -209,8 +224,6 @@ class _TicketListPageState extends State<TicketListPage>
           return 'priority_medium'.tr;
         case 'Low':
           return 'priority_low'.tr;
-        default:
-          return value;
       }
     } else if (label == 'filter_sort'.tr) {
       switch (value) {
@@ -222,10 +235,9 @@ class _TicketListPageState extends State<TicketListPage>
           return 'sort_priority'.tr;
         case 'progress':
           return 'sort_progress'.tr;
-        default:
-          return value;
       }
     }
+    // Fallback if no match is found
     return value;
   }
 
