@@ -14,7 +14,7 @@ import 'l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final initialMessage = await FirebaseUtils.setupFirebaseNotifications();
+  // final initialMessage = await FirebaseUtils.setupFirebaseNotifications();
 
   await GetStorage.init();
   await GetStorage.init();
@@ -22,7 +22,7 @@ void main() async {
   Get.put(LocalizationService());
   runApp(MainApp());
 
-  FirebaseUtils.handleInitialMessage(initialMessage);
+  // FirebaseUtils.handleInitialMessage(initialMessage);
 }
 
 class MainApp extends StatelessWidget {
