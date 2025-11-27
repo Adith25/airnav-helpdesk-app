@@ -58,15 +58,15 @@ class _TicketListPageState extends State<TicketListPage>
       appBar: AppBarWidget(titleText: 'my_tickets'.tr),
       body: Column(
         children: [
-          const SizedBox(height: 8),
+          const SizedBox(height: 1),
           _buildTabs(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 1),
           SearchField(
             onChanged: controller.onSearch,
             hintText: 'search_ticket_hint'.tr,
           ),
           _buildFilterBar(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 1),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -141,8 +141,8 @@ class _TicketListPageState extends State<TicketListPage>
                 : controller.sortOption.value;
 
         return PopupMenuButton<String>(
-          offset: const Offset(0, 50), // This provides the vertical offset
-          color: Colors.white, // Set dropdown menu color to white
+          offset: const Offset(0, 50),
+          color: Get.theme.cardColor, // Use theme card color
           onSelected: onChanged,
           itemBuilder: (context) {
             return items.map((itemValue) {
@@ -161,21 +161,21 @@ class _TicketListPageState extends State<TicketListPage>
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                borderSide: BorderSide(color: Get.theme.dividerColor),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                borderSide: BorderSide(color: Get.theme.dividerColor),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(
-                  color: Color(0xFF135CA1),
+                borderSide: BorderSide(
+                  color: Get.theme.primaryColor,
                   width: 1.5,
                 ),
               ),
               filled: true,
-              fillColor: Colors.white, // Set field color to white
+              fillColor: Get.theme.cardColor, // Use theme card color
             ),
             isEmpty: reactiveValue.isEmpty,
             child: Row(
@@ -187,9 +187,11 @@ class _TicketListPageState extends State<TicketListPage>
                         ? ''
                         : _getLocalizedValue(reactiveValue, label),
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Get.theme.textTheme.bodyLarge?.color),
                   ),
                 ),
-                const Icon(Icons.arrow_drop_down, size: 20),
+                Icon(Icons.arrow_drop_down,
+                    size: 20, color: Get.theme.hintColor),
               ],
             ),
           ),
@@ -243,6 +245,8 @@ class _TicketListPageState extends State<TicketListPage>
 
   Widget _buildTabs() {
     return Container(
+      // To make the TabBar background adapt, we color the container
+      color: Get.theme.scaffoldBackgroundColor,
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: TabBar(
         controller: _tabController,
@@ -250,8 +254,8 @@ class _TicketListPageState extends State<TicketListPage>
         tabAlignment: TabAlignment.start,
 
         // TEXT STYLE
-        labelColor: const Color(0xFF135CA1),
-        unselectedLabelColor: const Color(0xFF475569),
+        labelColor: Get.theme.primaryColor,
+        unselectedLabelColor: Get.theme.unselectedWidgetColor,
         labelStyle: GoogleFonts.poppins(
           fontSize: 14,
           fontWeight: FontWeight.w600,
@@ -264,8 +268,8 @@ class _TicketListPageState extends State<TicketListPage>
         // PADDING agar tab tidak tinggi
         labelPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
 
-        // INDICATOR SLIDING BIRU
-        indicatorColor: const Color(0xFF135CA1),
+        // INDICATOR
+        indicatorColor: Get.theme.primaryColor,
         indicatorWeight: 2,
         indicatorSize: TabBarIndicatorSize.label,
 
