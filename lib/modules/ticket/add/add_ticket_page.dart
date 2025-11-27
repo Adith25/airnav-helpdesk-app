@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +14,7 @@ class AddTicketPage extends GetView<AddTicketController> {
     return Scaffold(
       backgroundColor: Get.theme.scaffoldBackgroundColor,
       appBar: AppBarWidget(
-        titleText: 'Tiket Baru',
+        titleText: 'new_ticket_title'.tr,
         leading: IconButton(
           splashRadius: 24,
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -78,18 +80,21 @@ class AddTicketPage extends GetView<AddTicketController> {
     return _buildCard(
       Column(
         children: [
-          _buildSectionHeader('Pelapor Masalah'),
+          _buildSectionHeader('reporter_section'.tr),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                _buildReadOnlyField('NIK', '10014377'),
+                _buildReadOnlyField('nik_label'.tr, '10014377'),
                 const SizedBox(height: 16),
-                _buildReadOnlyField('Nama', 'BUDI'),
+                _buildReadOnlyField('name_label'.tr, 'BUDI'),
                 const SizedBox(height: 16),
-                _buildReadOnlyField('Departemen', 'IT'),
+                _buildReadOnlyField('department_label'.tr, 'IT'),
                 const SizedBox(height: 16),
-                _buildReadOnlyField('Bagian Departemen', 'IT DEVELOPMENT'),
+                _buildReadOnlyField(
+                  'sub_department_label'.tr,
+                  'IT DEVELOPMENT',
+                ),
               ],
             ),
           ),
@@ -102,67 +107,52 @@ class AddTicketPage extends GetView<AddTicketController> {
     return _buildCard(
       Column(
         children: [
-          _buildSectionHeader('Deskripsi Masalah'),
+          _buildSectionHeader('description_section'.tr),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 _buildDropdown(
-                  'Channel',
+                  'channel_label'.tr,
                   controller.selectedDepartment,
                   controller.departments,
                   controller.onDepartmentChanged,
                 ),
+
                 const SizedBox(height: 16),
                 _buildDropdown(
-                  'Pipeline',
-                  controller.selectedSubDepartment,
-                  controller.subDepartments,
-                  controller.onSubDepartmentChanged,
-                ),
-                const SizedBox(height: 16),
-                _buildDropdown(
-                  'Kategori Masalah',
+                  'category_label'.tr,
                   controller.selectedCategory,
                   controller.categories,
                   controller.onCategoryChanged,
                 ),
                 const SizedBox(height: 16),
                 _buildDropdown(
-                  'Sub Kategori',
+                  'sub_category_label'.tr,
                   controller.selectedSubCategory,
                   controller.subCategories,
                   controller.onSubCategoryChanged,
                 ),
                 const SizedBox(height: 16),
                 _buildDropdown(
-                  'Prioritas',
-                  controller.selectedPriority,
-                  controller.priorities,
-                  controller.onPriorityChanged,
-                ),
-                const SizedBox(height: 16),
-                _buildDropdown(
-                  'Source',
+                  'source_label'.tr,
                   controller.selectedSource,
                   controller.sources,
                   controller.onSourceChanged,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
-                  label: 'Subject Masalah',
-                  hint: 'problem_summary',
+                  label: 'subject_label'.tr,
+                  hint: 'subject_hint'.tr,
                   controller: controller.subjectController,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
-                  label: 'Deskripsi Masalah',
-                  hint: 'Jelaskan masalah Anda secara detail...',
+                  label: 'description_label'.tr,
+                  hint: 'description_hint'.tr,
                   maxLines: 4,
                   controller: controller.descriptionController,
                 ),
-                const SizedBox(height: 16),
-                _buildDueDatePicker(),
                 const SizedBox(height: 16),
                 _buildAttachmentPicker(),
                 const SizedBox(height: 24),
@@ -258,9 +248,9 @@ class AddTicketPage extends GetView<AddTicketController> {
                 vertical: 12,
               ),
             ),
-            hint: const Text(
-              '-- PILIH --',
-              style: TextStyle(color: Colors.grey, fontSize: 14),
+            hint: Text(
+              'choose_option'.tr,
+              style: const TextStyle(color: Colors.grey, fontSize: 14),
             ),
             items: items.map((String item) {
               return DropdownMenuItem<String>(
@@ -321,81 +311,92 @@ class AddTicketPage extends GetView<AddTicketController> {
     );
   }
 
-  Widget _buildDueDatePicker() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildLabel('Due Date'),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          decoration: BoxDecoration(
-            color: Get.theme.cardColor,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: Row(
-            children: const [
-              Icon(
-                Icons.calendar_today_outlined,
-                color: Colors.blueGrey,
-                size: 20,
-              ),
-              SizedBox(width: 12),
-              Text(
-                '24 Nov 2025, 16.04',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-        const Text(
-          'Default: 3 hari dari sekarang',
-          style: TextStyle(color: Colors.grey, fontSize: 11),
-        ),
-      ],
-    );
-  }
-
   Widget _buildAttachmentPicker() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabel('Lampiran', isRequired: false),
+        _buildLabel('attachment_label'.tr, isRequired: false),
         const SizedBox(height: 8),
-        Container(
-          height: 110,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Get.theme.cardColor,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.cloud_upload_outlined,
-                color: Get.theme.colorScheme.primary,
-                size: 32,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Klik untuk upload',
-                style: TextStyle(
+        InkWell(
+          onTap: controller.pickFiles,
+          child: Container(
+            height: 110,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Get.theme.cardColor,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.cloud_upload_outlined,
                   color: Get.theme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
+                  size: 32,
                 ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'PNG, JPG, PDF, DOC (MAX. 10MB)',
-                style: TextStyle(color: Colors.grey, fontSize: 11),
-              ),
-            ],
+                const SizedBox(height: 8),
+                Text(
+                  'click_to_upload'.tr,
+                  style: TextStyle(
+                    color: Get.theme.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'file_format_hint'.tr,
+                  style: TextStyle(color: Colors.grey, fontSize: 11),
+                ),
+              ],
+            ),
           ),
+        ),
+        Obx(
+          () =>
+              controller.selectedFiles.isNotEmpty
+                  ? Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: controller.selectedFiles.length,
+                        separatorBuilder: (context, index) => const SizedBox(height: 8),
+                        itemBuilder: (context, index) {
+                          final file = controller.selectedFiles[index];
+                          return Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.grey.shade300),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.attach_file, size: 20, color: Colors.grey.shade700),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    file.path.split('/').last,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () => controller.removeFile(index),
+                                  child: const Icon(Icons.close, size: 18, color: Colors.red),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  )
+                  : const SizedBox.shrink(),
         ),
       ],
     );
@@ -414,8 +415,8 @@ class AddTicketPage extends GetView<AddTicketController> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text(
-              'Submit Ticket',
+            child: Text(
+              'submit_ticket'.tr,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -438,8 +439,8 @@ class AddTicketPage extends GetView<AddTicketController> {
               ),
               side: BorderSide(color: Colors.grey.shade300, width: 1.5),
             ),
-            child: const Text(
-              'Reset Form',
+            child: Text(
+              'reset_form'.tr,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
           ),
