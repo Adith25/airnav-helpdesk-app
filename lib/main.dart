@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
       return ShadTheme(
         data: isDark ? AppTheme.shadDark : AppTheme.shadLight,
         child: GetMaterialApp(
-          key: ValueKey(key), // Force rebuild when key changes
+          key: ValueKey(key),
           title: 'Helpdesk',
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
