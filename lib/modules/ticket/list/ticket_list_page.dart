@@ -1,3 +1,4 @@
+import 'package:airnav_helpdesk/core/config/app_pages.dart';
 import 'package:airnav_helpdesk/core/widgets/app_bar_widget.dart';
 import 'package:airnav_helpdesk/core/widgets/search_field.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +27,11 @@ class _TicketListPageState extends State<TicketListPage>
 
     // Syncs TabController (swipe/tap) -> GetX controller
     _tabController.addListener(() {
-      final newIndex = _tabController.index;
-      if (controller.activeTab.value != controller.tabs[newIndex]) {
-        controller.changeTab(controller.tabs[newIndex]);
+      if (_tabController.indexIsChanging) {
+        final newIndex = _tabController.index;
+        if (controller.activeTab.value != controller.tabs[newIndex]) {
+          controller.changeTab(controller.tabs[newIndex]);
+        }
       }
     });
 
@@ -52,30 +55,30 @@ class _TicketListPageState extends State<TicketListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.theme.scaffoldBackgroundColor,
-      appBar: AppBarWidget(titleText: 'Tiket Saya'),
+      appBar: AppBarWidget(titleText: 'my_tickets'.tr),
       body: Column(
         children: [
           const SizedBox(height: 8),
-          _buildTabs(), // Now uses a standard TabBar for smooth animation
+          _buildTabs(),
           const SizedBox(height: 8),
           SearchField(
             onChanged: controller.onSearch,
-            hintText: 'Cari tiket...',
+            hintText: 'search_ticket_hint'.tr,
           ),
           _buildFilterBar(),
           const SizedBox(height: 8),
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: controller.tabs.map((_) {
+              children: controller.tabs.map((tabName) {
                 return Obx(() {
-                  final list = controller.tickets;
+                  final list = controller.getTicketsForTab(tabName);
                   return ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: list.length,
                     itemBuilder: (_, i) => TicketCard(
                       ticket: list[i],
-                      activeTab: controller.activeTab.value,
+                      activeTab: tabName,
                     ),
                   );
                 });
@@ -99,21 +102,21 @@ class _TicketListPageState extends State<TicketListPage>
       child: Row(
         children: [
           _filterDropdown(
-            label: "Status",
+            label: "filter_status".tr,
             value: controller.statusFilter.value,
             items: const ['', 'Done', 'In Progress', 'Assigned', 'New'],
             onChanged: controller.setStatusFilter,
           ),
           const SizedBox(width: 10),
           _filterDropdown(
-            label: "Priority",
+            label: "filter_priority".tr,
             value: controller.priorityFilter.value,
             items: const ['', 'Critical', 'High', 'Medium', 'Low'],
             onChanged: controller.setPriorityFilter,
           ),
           const SizedBox(width: 10),
           _filterDropdown(
-            label: "Sort",
+            label: "filter_sort".tr,
             value: controller.sortOption.value,
             items: const ['date_desc', 'date_asc', 'priority', 'progress'],
             onChanged: controller.setSortOption,
@@ -130,85 +133,102 @@ class _TicketListPageState extends State<TicketListPage>
     required Function(String) onChanged,
   }) {
     return Expanded(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Obx(() {
-            final reactiveValue = (label == "Status")
-                ? controller.statusFilter.value
-                : (label == "Priority")
-                ? controller.priorityFilter.value
-                : controller.sortOption.value;
+      child: Obx(() {
+        final reactiveValue = (label == "filter_status".tr)
+            ? controller.statusFilter.value
+            : (label == "filter_priority".tr)
+            ? controller.priorityFilter.value
+            : controller.sortOption.value;
 
-            return PopupMenuButton<String>(
-              offset: const Offset(0, 50),
-              onSelected: (val) => onChanged(val),
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+        return DropdownButtonFormField<String>(
+          isExpanded: true,
+          value: reactiveValue.isEmpty ? null : reactiveValue,
+          decoration: InputDecoration(
+            labelText: label,
+            labelStyle: const TextStyle(fontSize: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Color(0xFF135CA1),
+                width: 1.5,
               ),
-              itemBuilder: (BuildContext context) {
-                return items.map((String item) {
-                  final isSelected =
-                      (item.isEmpty && reactiveValue.isEmpty) ||
-                          item == reactiveValue;
-                  return PopupMenuItem<String>(
-                    value: item,
-                    padding: EdgeInsets.zero,
-                    child: Container(
-                      width: constraints.maxWidth,
-                      color: isSelected ? Colors.grey[200] : Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 12.0),
-                      child: Text(item.isEmpty ? 'All' : item),
-                    ),
-                  );
-                }).toList();
-              },
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  labelText: label,
-                  labelStyle: const TextStyle(fontSize: 12),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF135CA1),
-                      width: 1.5,
-                    ),
-                  ),
-                  filled: true,
-                  fillColor: Get.theme.cardColor,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      reactiveValue.isEmpty ? 'All' : reactiveValue,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    const Icon(Icons.arrow_drop_down, size: 20),
-                  ],
-                ),
-              ),
-            );
-          });
-        },
-      ),
+            ),
+            filled: true,
+            fillColor: Get.theme.cardColor,
+          ),
+          icon: const Icon(Icons.arrow_drop_down, size: 20),
+          items: items
+              .map(
+                (e) => DropdownMenuItem(
+              value: e,
+              child: Text(_getLocalizedValue(e, label)),
+            ),
+          )
+              .toList(),
+          onChanged: (val) => onChanged(val ?? ''),
+        );
+      }),
     );
   }
 
-  // Switched to TabBar for seamless sliding animation like in notification_page
+  String _getLocalizedValue(String value, String label) {
+    if (value.isEmpty) return 'status_all'.tr;
+
+    if (label == 'filter_status'.tr) {
+      switch (value) {
+        case 'Done':
+          return 'status_done'.tr;
+        case 'In Progress':
+          return 'status_in_progress'.tr;
+        case 'Assigned':
+          return 'status_assigned'.tr;
+        case 'New':
+          return 'status_new'.tr;
+        default:
+          return value;
+      }
+    } else if (label == 'filter_priority'.tr) {
+      switch (value) {
+        case 'Critical':
+          return 'priority_critical'.tr;
+        case 'High':
+          return 'priority_high'.tr;
+        case 'Medium':
+          return 'priority_medium'.tr;
+        case 'Low':
+          return 'priority_low'.tr;
+        default:
+          return value;
+      }
+    } else if (label == 'filter_sort'.tr) {
+      switch (value) {
+        case 'date_desc':
+          return 'sort_date_desc'.tr;
+        case 'date_asc':
+          return 'sort_date_asc'.tr;
+        case 'priority':
+          return 'sort_priority'.tr;
+        case 'progress':
+          return 'sort_progress'.tr;
+        default:
+          return value;
+      }
+    }
+    return value;
+  }
+
   Widget _buildTabs() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -216,7 +236,8 @@ class _TicketListPageState extends State<TicketListPage>
         controller: _tabController,
         isScrollable: true,
         tabAlignment: TabAlignment.start,
-        // Style replication from original design
+
+        // TEXT STYLE
         labelColor: const Color(0xFF135CA1),
         unselectedLabelColor: const Color(0xFF475569),
         labelStyle: GoogleFonts.poppins(
@@ -227,19 +248,21 @@ class _TicketListPageState extends State<TicketListPage>
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),
-        // Reduced vertical padding to decrease height
+
+        // PADDING agar tab tidak tinggi
         labelPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
 
-        // Indicator style for smooth sliding
+        // INDICATOR SLIDING BIRU
         indicatorColor: const Color(0xFF135CA1),
         indicatorWeight: 2,
         indicatorSize: TabBarIndicatorSize.label,
 
-        // Remove splash to feel more like the original
+        // Remove ripple/splash biar smooth
         splashFactory: NoSplash.splashFactory,
         overlayColor: MaterialStateProperty.all(Colors.transparent),
 
-        tabs: controller.tabs.map((tab) => Tab(text: tab)).toList(),
+        // MENAMPILKAN TAB SESUAI NAMA
+        tabs: controller.tabs.map((tab) => Tab(text: tab.tr)).toList(),
       ),
     );
   }

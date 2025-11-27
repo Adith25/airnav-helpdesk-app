@@ -2,23 +2,24 @@ import 'package:airnav_helpdesk/modules/ticket/ticket_model.dart';
 import 'package:get/get.dart';
 
 class TicketListController extends GetxController {
-  // Reactive lists
-  RxList<TicketModel> tickets = <TicketModel>[].obs;
   late List<TicketModel> _allTickets;
 
   // Tabs
   final List<String> tabs = [
-    'Daftar Tiket',
-    'Menunggu Konfirmasi',
-    'Menunggu Penugasan'
+    'ticket_tab_list',
+    'ticket_tab_waiting_confirm',
+    'ticket_tab_waiting_assign',
   ];
-  RxString activeTab = 'Daftar Tiket'.obs;
+  RxString activeTab = 'ticket_tab_list'.obs;
 
   // Search & filters
   RxString keyword = ''.obs;
   RxString statusFilter = ''.obs; // Done, In Progress, Assigned, New
   RxString priorityFilter = ''.obs; // Critical, High, Medium, Low
-  RxString sortOption = 'date_desc'.obs; // date_desc, date_asc, priority, progress
+  RxString sortOption =
+      'date_desc'.obs;
+
+  get tickets => null; // date_desc, date_asc, priority, progress
 
   @override
   void onInit() {
@@ -31,9 +32,7 @@ class TicketListController extends GetxController {
   // -----------------------------
   void changeTab(String tab) {
     activeTab.value = tab;
-    // When changing tabs, we might want to reset other filters
     statusFilter.value = '';
-    _applyFilters();
   }
 
   // -----------------------------
@@ -41,7 +40,6 @@ class TicketListController extends GetxController {
   // -----------------------------
   void onSearch(String value) {
     keyword.value = value.toLowerCase().trim();
-    _applyFilters();
   }
 
   // -----------------------------
@@ -49,12 +47,10 @@ class TicketListController extends GetxController {
   // -----------------------------
   void setStatusFilter(String value) {
     statusFilter.value = value;
-    _applyFilters();
   }
 
   void setPriorityFilter(String value) {
     priorityFilter.value = value;
-    _applyFilters();
   }
 
   // -----------------------------
@@ -62,7 +58,6 @@ class TicketListController extends GetxController {
   // -----------------------------
   void setSortOption(String value) {
     sortOption.value = value;
-    _applyFilters();
   }
 
   // -----------------------------
@@ -72,6 +67,70 @@ class TicketListController extends GetxController {
     Get.toNamed('/ticket/add');
   }
 
+  // -----------------------------
+  // DATA GETTER
+  // -----------------------------
+  List<TicketModel> getTicketsForTab(String tabName) {
+    List<TicketModel> result = List.from(_allTickets);
+
+    // --- TAB FILTER ---
+    switch (tabName) {
+      case 'ticket_tab_waiting_confirm':
+        result = result.where((t) => t.status == 'Assigned').toList();
+        break;
+      case 'ticket_tab_waiting_assign':
+        result = result.where((t) => t.status == 'New').toList();
+        break;
+      case 'ticket_tab_list':
+      default:
+        // No additional filtering for the "All" tab
+        break;
+    }
+
+    // --- SEARCH ---
+    if (keyword.isNotEmpty) {
+      final q = keyword.value;
+      result = result.where((t) {
+        return t.code.toLowerCase().contains(q) ||
+            t.title.toLowerCase().contains(q) ||
+            t.category.toLowerCase().contains(q) ||
+            t.subCategory.toLowerCase().contains(q) ||
+            t.priority.toLowerCase().contains(q) ||
+            t.status.toLowerCase().contains(q);
+      }).toList();
+    }
+
+    // --- STATUS FILTER ---
+    if (statusFilter.isNotEmpty) {
+      result = result.where((t) => t.status == statusFilter.value).toList();
+    }
+
+    // --- PRIORITY FILTER ---
+    if (priorityFilter.isNotEmpty) {
+      result = result.where((t) => t.priority == priorityFilter.value).toList();
+    }
+
+    // --- SORTING ---
+    switch (sortOption.value) {
+      case 'date_asc':
+        result.sort((a, b) => a.date.compareTo(b.date));
+        break;
+      case 'date_desc':
+        result.sort((a, b) => b.date.compareTo(a.date));
+        break;
+      case 'progress':
+        result.sort((a, b) => b.progress.compareTo(a.progress));
+        break;
+      case 'priority':
+        const prioOrder = {'Critical': 4, 'High': 3, 'Medium': 2, 'Low': 1};
+        result.sort(
+          (a, b) => (prioOrder[b.priority] ?? 0).compareTo(prioOrder[a.priority] ?? 0),
+        );
+        break;
+    }
+
+    return result;
+  }
   // -----------------------------
   // LOAD DUMMY DATA
   // -----------------------------
@@ -188,74 +247,5 @@ class TicketListController extends GetxController {
     ];
 
     _allTickets = list;
-    _applyFilters();
-  }
-
-  // -----------------------------
-  // FILTERING + SORTING PIPELINE
-  // -----------------------------
-  void _applyFilters() {
-    List<TicketModel> result = List.from(_allTickets);
-
-    // --- TAB FILTER ---
-    switch (activeTab.value) {
-      case 'Menunggu Konfirmasi':
-        result = result.where((t) => t.status == 'Assigned').toList();
-        break;
-      case 'Menunggu Penugasan':
-        result = result.where((t) => t.status == 'New').toList();
-        break;
-      case 'Daftar Tiket':
-      default:
-        // No additional filtering
-        break;
-    }
-
-    // --- SEARCH ---
-    if (keyword.isNotEmpty) {
-      final q = keyword.value;
-      result = result.where((t) {
-        return t.code.toLowerCase().contains(q) ||
-            t.title.toLowerCase().contains(q) ||
-            t.category.toLowerCase().contains(q) ||
-            t.subCategory.toLowerCase().contains(q) ||
-            t.priority.toLowerCase().contains(q) ||
-            t.status.toLowerCase().contains(q);
-      }).toList();
-    }
-
-    // --- STATUS FILTER ---
-    if (statusFilter.isNotEmpty) {
-      result = result.where((t) => t.status == statusFilter.value).toList();
-    }
-
-    // --- PRIORITY FILTER ---
-    if (priorityFilter.isNotEmpty) {
-      result = result.where((t) => t.priority == priorityFilter.value).toList();
-    }
-
-    // --- SORTING ---
-    switch (sortOption.value) {
-      case 'date_asc':
-        result.sort((a, b) => a.date.compareTo(b.date));
-        break;
-      case 'date_desc':
-        result.sort((a, b) => b.date.compareTo(a.date));
-        break;
-      case 'progress':
-        result.sort((a, b) => b.progress.compareTo(a.progress));
-        break;
-      case 'priority':
-        const prioOrder = {
-          'Critical': 4,
-          'High': 3,
-          'Medium': 2,
-          'Low': 1,
-        };
-        result.sort((a, b) => prioOrder[b.priority]!.compareTo(prioOrder[a.priority]!));
-        break;
-    }
-
-    tickets.assignAll(result);
   }
 }
