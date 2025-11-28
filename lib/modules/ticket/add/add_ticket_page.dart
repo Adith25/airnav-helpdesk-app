@@ -87,13 +87,13 @@ class AddTicketPage extends GetView<AddTicketController> {
               children: [
                 _buildReadOnlyField('nik_label'.tr, '10014377'),
                 const SizedBox(height: 16),
-                _buildReadOnlyField('name_label'.tr, 'BUDI'),
+                _buildReadOnlyField('name_label'.tr, 'Budi'),
                 const SizedBox(height: 16),
                 _buildReadOnlyField('department_label'.tr, 'IT'),
                 const SizedBox(height: 16),
                 _buildReadOnlyField(
                   'sub_department_label'.tr,
-                  'IT DEVELOPMENT',
+                  'IT Develpoment',
                 ),
               ],
             ),
@@ -169,7 +169,6 @@ class AddTicketPage extends GetView<AddTicketController> {
     return RichText(
       text: TextSpan(
         text: label,
-        style: const TextStyle(fontSize: 13, color: Colors.black54),
         children: <TextSpan>[
           if (isRequired)
             const TextSpan(
@@ -190,14 +189,22 @@ class AddTicketPage extends GetView<AddTicketController> {
         TextFormField(
           initialValue: value,
           readOnly: true,
-          style: const TextStyle(fontWeight: FontWeight.w500),
+          style: const TextStyle(), // Removed font weight to match other fields
           decoration: InputDecoration(
             filled: true,
             fillColor:
                 Get.theme.inputDecorationTheme.fillColor ?? Get.theme.cardColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
