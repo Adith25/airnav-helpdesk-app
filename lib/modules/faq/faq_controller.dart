@@ -1,10 +1,16 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class FaqController extends GetxController {
   final RxString selectedCategory = 'faq_cat_it'.obs;
-  final RxString searchQuery = ''.obs; // To store the search query
+  final RxString searchQuery = ''.obs;
+  final RxSet<String> bookmarkedIds = <String>{}.obs;
+  final _storage = GetStorage();
+
+  static const String _bookmarksKey = 'faq_bookmarks';
 
   final List<String> categories = [
+    'faq_cat_bookmarked',
     'faq_cat_it',
     'faq_cat_hr',
     'faq_cat_legal',
@@ -16,24 +22,29 @@ class FaqController extends GetxController {
   final RxList<FaqItem> allFaqItems = [
     // IT
     FaqItem(
+      id: 'faq_it_1',
       question: 'Bagaimana cara mengajukan permintaan perbaikan perangkat?',
       answer:
           'Anda dapat mengajukan permintaan perbaikan perangkat melalui aplikasi dengan memilih kategori IT, kemudian mengisi detail permasalahan yang Anda alami. Tim IT akan segera menindaklanjuti permintaan Anda dalam waktu 1x24 jam.',
       category: 'faq_cat_it',
     ),
     FaqItem(
+      id: 'faq_it_2',
       question: 'Apa saja kategori masalah IT yang bisa diajukan?',
       answer:
           'Kategori masalah IT meliputi: Jaringan & Internet, Perangkat Keras (Hardware), Perangkat Lunak (Software), Email & Akun, dan Akses Sistem. Silakan pilih kategori yang sesuai dengan permasalahan Anda.',
       category: 'faq_cat_it',
+      fileName: 'Panduan_Kategori_IT.pdf',
     ),
     FaqItem(
+      id: 'faq_it_3',
       question: 'Berapa lama waktu respon dari tim IT?',
       answer:
           'Untuk permintaan dengan prioritas tinggi, tim IT akan merespon dalam waktu 2-4 jam. Untuk prioritas normal, respon akan diberikan dalam waktu 1x24 jam kerja.',
       category: 'faq_cat_it',
     ),
     FaqItem(
+      id: 'faq_it_4',
       question: 'Bagaimana cara melacak status tiket IT saya?',
       answer:
           'Anda dapat melacak status tiket IT melalui halaman utama aplikasi. Setiap tiket akan menampilkan status terkini seperti: Pending, Dalam Proses, atau Selesai. Anda juga akan menerima notifikasi saat ada update.',
@@ -42,38 +53,46 @@ class FaqController extends GetxController {
 
     // SDM
     FaqItem(
+      id: 'faq_hr_1',
       question: 'Bagaimana cara mengajukan cuti?',
       answer:
           'Untuk mengajukan cuti, buka aplikasi dan pilih kategori SDM, lalu pilih jenis permohonan "Cuti". Isi formulir dengan lengkap termasuk tanggal mulai dan berakhirnya cuti, serta alasan cuti. Permohonan akan diproses oleh atasan dan tim SDM.',
       category: 'faq_cat_hr',
     ),
     FaqItem(
+      id: 'faq_hr_2',
       question: 'Berapa lama proses persetujuan cuti?',
       answer:
           'Proses persetujuan cuti biasanya memakan waktu 2-3 hari kerja. Anda akan menerima notifikasi melalui aplikasi dan email setelah permohonan Anda disetujui atau ditolak.',
       category: 'faq_cat_hr',
     ),
     FaqItem(
+      id: 'faq_hr_3',
       question: 'Apa saja dokumen yang diperlukan untuk klaim reimbursement?',
       answer:
           'Untuk klaim reimbursement, Anda perlu melampirkan: Bukti pembayaran asli (kuitansi/invoice), Formulir klaim yang sudah diisi, dan Bukti pendukung lainnya sesuai kebijakan perusahaan. Pastikan semua dokumen lengkap agar proses lebih cepat.',
       category: 'faq_cat_hr',
+      fileName: 'Form_Reimbursement.xlsx',
     ),
 
     // Legal
     FaqItem(
+      id: 'faq_legal_1',
       question: 'Bagaimana cara mengajukan konsultasi legal?',
       answer:
           'Untuk konsultasi legal, pilih kategori Legal di aplikasi, kemudian jelaskan permasalahan atau pertanyaan legal Anda secara detail. Tim legal akan menghubungi Anda untuk jadwal konsultasi dalam waktu 2x24 jam.',
       category: 'faq_cat_legal',
     ),
     FaqItem(
+      id: 'faq_legal_2',
       question: 'Apa saja layanan yang disediakan oleh tim legal?',
       answer:
           'Tim legal menyediakan layanan konsultasi kontrak, review dokumen legal, penanganan sengketa, perizinan, dan compliance. Semua layanan dapat diakses melalui sistem ticketing ini.',
       category: 'faq_cat_legal',
+      fileName: 'Layanan_Legal.pdf',
     ),
     FaqItem(
+      id: 'faq_legal_3',
       question: 'Apakah konsultasi legal bersifat rahasia?',
       answer:
           'Ya, semua konsultasi dan komunikasi dengan tim legal bersifat rahasia dan dijaga kerahasiaannya sesuai dengan kode etik profesi dan kebijakan perusahaan.',
@@ -82,18 +101,21 @@ class FaqController extends GetxController {
 
     // Keamanan
     FaqItem(
+      id: 'faq_security_1',
       question: 'Bagaimana cara melaporkan insiden keamanan?',
       answer:
           'Untuk melaporkan insiden keamanan, segera buat tiket dengan kategori Keamanan dan pilih prioritas Tinggi. Jelaskan detail insiden yang terjadi, lokasi, dan waktu kejadian. Tim keamanan akan segera merespon.',
       category: 'faq_cat_security',
     ),
     FaqItem(
+      id: 'faq_security_2',
       question: 'Apa yang harus dilakukan jika kehilangan kartu akses?',
       answer:
           'Jika kehilangan kartu akses, segera laporkan melalui aplikasi dengan kategori Keamanan. Kartu lama akan dinonaktifkan dan Anda akan diberikan kartu pengganti. Proses penggantian memakan waktu 1-2 hari kerja.',
       category: 'faq_cat_security',
     ),
     FaqItem(
+      id: 'faq_security_3',
       question: 'Bagaimana prosedur visitor/tamu ke kantor?',
       answer:
           'Untuk mengajukan izin tamu, buat permintaan melalui aplikasi minimal 1 hari sebelumnya. Sertakan informasi lengkap tamu termasuk nama, NIK, instansi, dan keperluan. Tamu akan mendapatkan visitor pass saat check-in.',
@@ -102,38 +124,45 @@ class FaqController extends GetxController {
 
     // Keuangan
     FaqItem(
+      id: 'faq_finance_1',
       question: 'Bagaimana cara mengajukan reimburse?',
       answer:
           'Untuk mengajukan reimburse, pilih kategori Keuangan, upload bukti pembayaran yang valid, isi nominal dan keterangan dengan jelas. Proses verifikasi akan dilakukan oleh tim finance dalam 3-5 hari kerja.',
       category: 'faq_cat_finance',
     ),
     FaqItem(
+      id: 'faq_finance_2',
       question: 'Kapan dana reimburse akan cair?',
       answer:
           'Setelah reimburse disetujui, dana akan ditransfer ke rekening Anda pada periode pencairan berikutnya, biasanya setiap tanggal 25 setiap bulan. Anda akan menerima notifikasi setelah transfer berhasil.',
       category: 'faq_cat_finance',
     ),
     FaqItem(
+      id: 'faq_finance_3',
       question: 'Apa saja yang bisa di-reimburse?',
       answer:
           'Yang dapat di-reimburse meliputi: Biaya perjalanan dinas, Transportasi operasional, Konsumsi rapat/meeting, Pembelian supplies kantor, dan biaya lain yang telah disetujui sesuai kebijakan perusahaan.',
       category: 'faq_cat_finance',
+      fileName: 'Kebijakan_Reimbursement_2024.pdf',
     ),
 
     // Humas
     FaqItem(
+      id: 'faq_pr_1',
       question: 'Bagaimana cara mengajukan publikasi/press release?',
       answer:
           'Untuk mengajukan publikasi atau press release, pilih kategori Humas dan sertakan draft konten yang ingin dipublikasikan. Tim Humas akan melakukan review dan koordinasi dengan pihak terkait sebelum publikasi dilakukan.',
       category: 'faq_cat_pr',
     ),
     FaqItem(
+      id: 'faq_pr_2',
       question: 'Bagaimana prosedur peminjaman ruang meeting?',
       answer:
           'Peminjaman ruang meeting dapat dilakukan melalui aplikasi dengan memilih kategori Humas. Tentukan tanggal, waktu, dan ruangan yang diinginkan. Konfirmasi akan diberikan setelah pengecekan ketersediaan ruangan.',
       category: 'faq_cat_pr',
     ),
     FaqItem(
+      id: 'faq_pr_3',
       question: 'Apa saja layanan yang disediakan tim Humas?',
       answer:
           'Tim Humas menyediakan layanan: Koordinasi event internal, Publikasi & komunikasi korporat, Peminjaman fasilitas, Pembuatan materi promosi, dan Hubungan media. Semua layanan dapat diakses melalui sistem ini.',
@@ -144,34 +173,67 @@ class FaqController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    loadBookmarks();
     // Reset expansion state on init
     for (var item in allFaqItems) {
       item.isExpanded = false;
     }
   }
 
-  // Method to update the search query
+  void loadBookmarks() {
+    final saved = _storage.read<List>(_bookmarksKey);
+    if (saved != null) {
+      bookmarkedIds.addAll(saved.cast<String>());
+    }
+  }
+
+  void saveBookmarks() {
+    _storage.write(_bookmarksKey, bookmarkedIds.toList());
+  }
+
+  void toggleBookmark(String id) {
+    if (bookmarkedIds.contains(id)) {
+      bookmarkedIds.remove(id);
+    } else {
+      bookmarkedIds.add(id);
+    }
+    saveBookmarks();
+  }
+
+  bool isBookmarked(String id) {
+    return bookmarkedIds.contains(id);
+  }
+
   void onSearch(String query) {
     searchQuery.value = query;
   }
 
   List<FaqItem> get filteredFaqItems {
-    // Start with items of the selected category
-    var filtered = allFaqItems
-        .where((item) => item.category == selectedCategory.value)
-        .toList();
+    var filtered = allFaqItems.toList();
 
-    // If there is a search query, filter further
+    // Filter by bookmarked if selected
+    if (selectedCategory.value == 'faq_cat_bookmarked') {
+      filtered = filtered
+          .where((item) => bookmarkedIds.contains(item.id))
+          .toList();
+    } else {
+      // Filter by category
+      filtered = filtered
+          .where((item) => item.category == selectedCategory.value)
+          .toList();
+    }
+
+    // Filter by search query
     if (searchQuery.value.isNotEmpty) {
       final queryLower = searchQuery.value.toLowerCase();
       filtered = filtered.where((item) {
         final questionLower = item.question.toLowerCase();
         final answerLower = item.answer.toLowerCase();
-        // Return true if either question or answer contains the query
         return questionLower.contains(queryLower) ||
             answerLower.contains(queryLower);
       }).toList();
     }
+
     return filtered;
   }
 
@@ -187,21 +249,25 @@ class FaqController extends GetxController {
     final filtered = filteredFaqItems;
     if (index < filtered.length) {
       filtered[index].isExpanded = !filtered[index].isExpanded;
-      allFaqItems.refresh(); // Use refresh() to update the UI
+      allFaqItems.refresh();
     }
   }
 }
 
 class FaqItem {
+  final String id;
   final String question;
   final String answer;
   final String category;
+  final String? fileName;
   bool isExpanded;
 
   FaqItem({
+    required this.id,
     required this.question,
     required this.answer,
     required this.category,
+    this.fileName,
     this.isExpanded = false,
   });
 }

@@ -22,7 +22,7 @@ class FaqPage extends GetView<FaqController> {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 5),
+          const SizedBox(height: 1),
           // Search Bar
           SearchField(
             onChanged: controller.onSearch,
@@ -31,7 +31,7 @@ class FaqPage extends GetView<FaqController> {
           // Filter Tabs
           Container(
             color: Colors.transparent,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
             child: _buildFilterTabs(),
           ),
           // FAQ List
@@ -103,6 +103,26 @@ class FaqPage extends GetView<FaqController> {
     });
   }
 
+  IconData _getFileIcon(String fileName) {
+    final extension = fileName.split('.').last.toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return Icons.picture_as_pdf;
+      case 'doc':
+      case 'docx':
+        return Icons.description;
+      case 'xls':
+      case 'xlsx':
+        return Icons.table_chart;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        return Icons.image;
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
+
   Widget _buildFaqItem(FaqItem item, int index) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -158,7 +178,23 @@ class FaqPage extends GetView<FaqController> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 8),
+                  Obx(
+                    () => IconButton(
+                      icon: Icon(
+                        controller.isBookmarked(item.id)
+                            ? Icons.bookmark
+                            : Icons.bookmark_border,
+                        color: controller.isBookmarked(item.id)
+                            ? Get.theme.colorScheme.primary
+                            : Get.theme.textTheme.bodyMedium?.color,
+                      ),
+                      onPressed: () => controller.toggleBookmark(item.id),
+                      splashRadius: 20,
+                      iconSize: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
                   Icon(
                     item.isExpanded
                         ? Icons.keyboard_arrow_up_rounded
@@ -193,13 +229,92 @@ class FaqPage extends GetView<FaqController> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        item.answer,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Get.theme.textTheme.bodyMedium?.color,
-                          height: 1.6,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.answer,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Get.theme.textTheme.bodyMedium?.color,
+                              height: 1.6,
+                            ),
+                          ),
+                          if (item.fileName != null) ...[
+                            const SizedBox(height: 12),
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Get.theme.colorScheme.primary
+                                    .withOpacity(0.05),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Get.theme.colorScheme.primary
+                                      .withOpacity(0.2),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Get.theme.colorScheme.primary
+                                          .withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Icon(
+                                      _getFileIcon(item.fileName!),
+                                      color: Get.theme.colorScheme.primary,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item.fileName!,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: Get
+                                                .theme
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          'Lampiran',
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: Get
+                                                .theme
+                                                .textTheme
+                                                .bodySmall
+                                                ?.color
+                                                ?.withOpacity(0.7),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.download_rounded,
+                                    color: Get.theme.colorScheme.primary,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
                   ],

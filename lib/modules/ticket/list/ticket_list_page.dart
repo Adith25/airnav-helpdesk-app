@@ -58,27 +58,27 @@ class _TicketListPageState extends State<TicketListPage>
       appBar: AppBarWidget(titleText: 'my_tickets'.tr),
       body: Column(
         children: [
-          const SizedBox(height: 8),
-          _buildTabs(), // Now uses a standard TabBar for smooth animation
-          const SizedBox(height: 8),
+          const SizedBox(height: 1),
+          _buildTabs(),
+          const SizedBox(height: 1),
           SearchField(
             onChanged: controller.onSearch,
             hintText: 'search_ticket_hint'.tr,
           ),
           _buildFilterBar(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 1),
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: controller.tabs.map((_) {
+              children: controller.tabs.map((tabName) {
                 return Obx(() {
-                  final list = controller.tickets;
+                  final list = controller.getTicketsForTab(tabName);
                   return ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: list.length,
                     itemBuilder: (_, i) => TicketCard(
                       ticket: list[i],
-                      activeTab: controller.activeTab.value,
+                      activeTab: tabName,
                     ),
                   );
                 });
@@ -98,7 +98,7 @@ class _TicketListPageState extends State<TicketListPage>
 
   Widget _buildFilterBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
       child: Row(
         children: [
           _filterDropdown(
@@ -118,7 +118,7 @@ class _TicketListPageState extends State<TicketListPage>
           _filterDropdown(
             label: "filter_sort".tr,
             value: controller.sortOption.value,
-            items: const ['date_desc', 'date_asc', 'priority', 'progress'],
+            items: const ['', 'date_desc', 'date_asc', 'priority', 'progress'],
             onChanged: controller.setSortOption,
           ),
         ],
@@ -137,55 +137,76 @@ class _TicketListPageState extends State<TicketListPage>
         final reactiveValue = (label == "filter_status".tr)
             ? controller.statusFilter.value
             : (label == "filter_priority".tr)
-            ? controller.priorityFilter.value
-            : controller.sortOption.value;
+                ? controller.priorityFilter.value
+                : controller.sortOption.value;
 
-        return DropdownButtonFormField<String>(
-          isExpanded: true,
-          value: reactiveValue.isEmpty ? null : reactiveValue,
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: const TextStyle(fontSize: 12),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 8,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF135CA1),
-                width: 1.5,
+        return PopupMenuButton<String>(
+          offset: const Offset(0, 50),
+          color: Get.theme.cardColor, // Use theme card color
+          onSelected: onChanged,
+          itemBuilder: (context) {
+            return items.map((itemValue) {
+              return PopupMenuItem<String>(
+                value: itemValue,
+                child: Text(_getLocalizedValue(itemValue, label),
+                    style: GoogleFonts.montserrat()),
+              );
+            }).toList();
+          },
+          child: InputDecorator(
+            decoration: InputDecoration(
+              labelText: label,
+              labelStyle: GoogleFonts.montserrat(fontSize: 14),
+              floatingLabelStyle: GoogleFonts.montserrat(fontSize: 16),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Get.theme.dividerColor),
               ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Get.theme.dividerColor),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: Get.theme.primaryColor,
+                  width: 1.5,
+                ),
+              ),
+              filled: true,
+              fillColor: Get.theme.cardColor, // Use theme card color
             ),
-            filled: true,
-            fillColor: Get.theme.cardColor,
+            isEmpty: reactiveValue.isEmpty,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    reactiveValue.isEmpty
+                        ? ''
+                        : _getLocalizedValue(reactiveValue, label),
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.montserrat(
+                        color: Get.theme.textTheme.bodyLarge?.color),
+                  ),
+                ),
+                Icon(Icons.arrow_drop_down,
+                    size: 20, color: Get.theme.hintColor),
+              ],
+            ),
           ),
-          icon: const Icon(Icons.arrow_drop_down, size: 20),
-          items: items
-              .map(
-                (e) => DropdownMenuItem(
-              value: e,
-              child: Text(_getLocalizedValue(e, label)),
-            ),
-          )
-              .toList(),
-          onChanged: (val) => onChanged(val ?? ''),
         );
       }),
     );
   }
 
   String _getLocalizedValue(String value, String label) {
+    // The "All" option has an empty string value.
     if (value.isEmpty) return 'status_all'.tr;
 
+    // For other values, find the correct translation.
     if (label == 'filter_status'.tr) {
       switch (value) {
         case 'Done':
@@ -196,8 +217,6 @@ class _TicketListPageState extends State<TicketListPage>
           return 'status_assigned'.tr;
         case 'New':
           return 'status_new'.tr;
-        default:
-          return value;
       }
     } else if (label == 'filter_priority'.tr) {
       switch (value) {
@@ -209,8 +228,6 @@ class _TicketListPageState extends State<TicketListPage>
           return 'priority_medium'.tr;
         case 'Low':
           return 'priority_low'.tr;
-        default:
-          return value;
       }
     } else if (label == 'filter_sort'.tr) {
       switch (value) {
@@ -222,56 +239,48 @@ class _TicketListPageState extends State<TicketListPage>
           return 'sort_priority'.tr;
         case 'progress':
           return 'sort_progress'.tr;
-        default:
-          return value;
       }
     }
+    // Fallback if no match is found
     return value;
   }
 
-  Widget _tabItem(String title, bool isActive, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        margin: const EdgeInsets.only(right: 8),
-        decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF135CA1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isActive ? const Color(0xFF135CA1) : Colors.grey.shade300,
-          ),
-        ),
-        child: Text(
-          title,
-          style: GoogleFonts.poppins(
-            fontSize: 12,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-            color: isActive ? Colors.white : Colors.grey.shade600,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildTabs() {
-    return Obx(
-          () => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: controller.tabs
-                .map(
-                  (tab) => _tabItem(
-                tab.tr,
-                controller.activeTab.value == tab,
-                    () => controller.changeTab(tab),
-              ),
-            )
-                .toList(),
-          ),
+    return Container(
+      // To make the TabBar background adapt, we color the container
+      color: Get.theme.scaffoldBackgroundColor,
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: TabBar(
+        controller: _tabController,
+        isScrollable: true,
+        tabAlignment: TabAlignment.start,
+
+        // TEXT STYLE
+        labelColor: Get.theme.primaryColor,
+        unselectedLabelColor: Get.theme.unselectedWidgetColor,
+        labelStyle: GoogleFonts.montserrat(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
         ),
+        unselectedLabelStyle: GoogleFonts.montserrat(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
+
+        // PADDING agar tab tidak tinggi
+        labelPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+
+        // INDICATOR
+        indicatorColor: Get.theme.primaryColor,
+        indicatorWeight: 2,
+        indicatorSize: TabBarIndicatorSize.label,
+
+        // Remove ripple/splash biar smooth
+        splashFactory: NoSplash.splashFactory,
+        overlayColor: MaterialStateProperty.all(Colors.transparent),
+
+        // MENAMPILKAN TAB SESUAI NAMA
+        tabs: controller.tabs.map((tab) => Tab(text: tab.tr)).toList(),
       ),
     );
   }
