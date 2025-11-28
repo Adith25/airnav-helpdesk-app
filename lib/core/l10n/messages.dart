@@ -349,6 +349,7 @@ class Messages extends Translations {
       'filter_priority': 'Prioritas',
       'filter_sort': 'Urutkan',
       'status_all': 'Semua',
+      // 'status_done': 'Selesai'
       'status_in_progress': 'Dalam Proses',
       'status_assigned': 'Ditugaskan',
       'status_new': 'Baru',
